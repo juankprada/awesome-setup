@@ -20,7 +20,8 @@
     - import_tasks: tasks/awesome-java-setup.yml
     - import_tasks: tasks/js-setup.yml
     - import_tasks: tasks/personal-projects.yml
-    - import_tasks: tasks/debugger.yml
+    # - import_tasks: tasks/debugger.yml
+    - import_tasks: tasks/dotfiles.yml
 
     - import_tasks: tasks/cleanup.yml
 
