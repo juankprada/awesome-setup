@@ -1,0 +1,32 @@
+- name: El Dorado GDX exists
+  stat:
+    path: "{{ projects }}/el-dorado-gdx"
+  register: eldorado
+  tags:
+    - install
+    - dotfiles
+    - personal-project
+  become: no
+
+- name: Personal Project El Dorado GDX
+  git:
+    clone: yes
+    repo: 'git@github.com:juankprada/el-dorado-gdx.git'
+    dest: "{{ projects }}/el-dorado-gdx"
+    accept_hostkey: yes
+    key_file: "{{ lookup('env', 'HOME') }}/.ssh/{{ssh_key_name}}"
+  tags:
+    - install
+    - dotfiles
+    - personal-project
+  when: eldorado.stat.exists == False
+  become: no
+
+- name: El Dorado GDX Master Checkout
+  shell: cd {{ projects }}/el-dorado-gdx && git fetch
+  tags:
+    - install
+    - dotfiles
+    - personal-project
+  when: eldorado.stat.exists == False
+  become: no

@@ -1,0 +1,112 @@
+# Debian based distros
+
+- name: Install System Packages 1 core development tools on Debian Based Distros
+  become: true
+  apt:
+    name: ["build-essential", "cmake", "pkg-config", "libpthread-stubs0-dev"]
+  tags:
+    - install
+    - core
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Install System Packages 2 (zsh, lua, unzip, libtool, libtool-bin, gettext, emacs)
+  become: true
+  apt:
+    name: [ "lua5.1", "unzip", "libtool", "libtool-bin", "gettext"]
+  tags:
+    - install
+    - core
+  when:  ansible_distribution  == 'Ubuntu'
+
+- name: Install System Packages 3 (the rest)
+  become: true
+  apt:
+    name: [ "compton", "curl", "htop", "golang", "lsof", "i3", "ccache", "ninja-build", "python3-pip", "dconf-editor", "nvidia-settings", "pavucontrol", "moreutils", "clangd", "ubuntu-mate-desktop" ]
+  tags:
+    - install
+    - core
+  when:  ansible_distribution  == 'Ubuntu'
+
+- name: Install Clang
+  become: true
+  apt:
+    name: ["clang", "clang-11", "clang-12", "clangd", "clangd-10", "clangd-11", "clangd-12"]
+  tags:
+    - install
+    - core
+  when:  ansible_distribution  == 'Ubuntu'
+
+
+# Fedora and Red Hat based disstros
+- name: Install System Packages 1 core development tools on Red Hat based Distros
+  become: true
+  dnf:
+    name:
+      - '@Development Tools'
+      - '@Development Libraries'
+    state: latest
+  tags:
+    - install
+    - core
+  when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+
+
+- name: Install System Packages 2 (zsh, emacs, curl, git, lua, unzip, libtool, libtool, gettext)
+  become: true
+  dnf:
+    name:
+      - zsh
+      - emacs
+      - curl
+      - git
+      - lua
+      - unzip
+      - libtool
+      - gettext
+    state: latest
+  tags:
+    - install
+    - core
+  when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+
+- name: Install System Packages 3 (the rest)
+  become: true
+  dnf:
+    name:
+      - curl
+      - htop
+      - golang
+      - lsof
+      - i3
+      - ccache
+      - ninja-build
+      - python3-pip
+      - nvidia-settings
+      - pavucontrol
+      - moreutils
+    state: latest
+  tags:
+    - install
+    - core
+  when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+
+- name: Install Clang
+  become: true
+  dnf:
+    name:
+      - clang
+      - clang-10-libs
+      - clang-11-libs
+      - clang-12-libs
+      - clang-13-libs
+      - clang-14-libs
+      - clang-15-libs
+      - clang
+    state: latest
+  tags:
+    - install
+    - core
+  when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+
+
+# TODO: Windows? Mac? those can go su** my juicy **lls

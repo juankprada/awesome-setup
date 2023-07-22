@@ -1,0 +1,27 @@
+- name: Update Fedora
+  dnf:
+    name: '*'
+    state: latest
+    update_cache: yes
+    update_only: yes
+  become: yes
+
+- name: Enable the RPM Fusion Free repository
+  dnf:
+    name: "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ansible_distribution_major_version}}.noarch.rpm"
+    state: present
+  become: yes
+  when: ansible_distribution == 'Fedora'
+
+- name: Enable the RPM Fusion Non-Free repository
+  dnf:
+    name: "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ansible_distribution_major_version}}.noarch.rpm"
+    state: present
+  become: yes
+  when: ansible_distribution == 'Fedora'
+
+- name: Remove unneded packages
+  dnf:
+    autoremove: yes
+  become: yes
+  when: ansible_distribution == 'Fedora'
