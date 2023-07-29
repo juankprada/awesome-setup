@@ -46,7 +46,8 @@
   become: no
 
 - name: Add key to SSH Agent
-  script: ./setup.sh
+  shell: "ssh -o ForwardAgent=no {{inventory_hostname}} 'eval `ssh-agent -s` && ssh-add $HOME/.ssh/id_ed25519 && ssh-add -l'"
+  #script: ./setup.sh
   tags:
     - dotfiles
     - ssh
