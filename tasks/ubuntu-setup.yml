@@ -35,7 +35,7 @@
     - install
     - core
     - ubuntu
-    when: ansible_distribution == 'Ubuntu'
+  when: ansible_distribution == 'Ubuntu'
 
 
 - name: Install System Packages 4 (Extra tools not used that often but necessary for my setup)
@@ -58,7 +58,7 @@
     - install
     - core
     - ubuntu
-    when: ansible_distribution == 'Ubuntu'
+  when: ansible_distribution == 'Ubuntu'
 
 - name: Install Clang
   become: true
@@ -78,7 +78,7 @@
     - install
     - core
     - ubuntu
-    when: ansible_distribution == 'Ubuntu'
+  when: ansible_distribution == 'Ubuntu'
 
 - name: Install my Art Studio
   become: true
@@ -92,4 +92,4 @@
     - install
     - core
     - ubuntu
-    when: ansible_distribution == 'Ubuntu'
+  when: ansible_distribution == 'Ubuntu'
