@@ -91,12 +91,12 @@
   dnf:
     name:
       - clang
-      - clang-10-libs
-      - clang-11-libs
-      - clang-12-libs
-      - clang-13-libs
-      - clang-14-libs
-      - clang-15-libs
+      - clang10-libs
+      - clang11-libs
+      - clang12-libs
+      - clang13-libs
+      - clang14-libs
+      - clang15-libs
       - clang
     state: latest
   tags:
