@@ -1,14 +1,3 @@
-- name: Installing stow
-  dnf:
-    name:
-      - stow
-    state: latest
-  become: yes
-  tags:
-    - install
-    - dotfiles
-    - stow
-
 - name: Cloning .dotfiles
   ansible.builtin.git:
     repo: 'git@github.com:juankprada/dotfiles.git'

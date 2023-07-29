@@ -59,6 +59,7 @@
       - libtool
       - gettext
       - jq
+      - stow
     state: latest
   tags:
     - install
