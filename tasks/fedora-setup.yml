@@ -109,14 +109,9 @@
   tags:
     - install
     - core
-
-
-- name: Snap Classic Support Is Setup
-  path: "/snap"
-  register: snap
-  become: no
+  when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
 
 - name: Enable Classic SNAPs support
   shell: ln -s /var/lib/snapd/snap /snap
   become: yes
-  when: snap.stat.exists = False
+  when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
