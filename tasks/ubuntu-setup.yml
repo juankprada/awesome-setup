@@ -52,7 +52,7 @@
       - nvidia-settings
       - pavucontrol
       - moreutils
-      - flatpack
+      - flatpak
       - gnome-software-plugin-flatpak
   tags:
     - install
