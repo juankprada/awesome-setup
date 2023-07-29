@@ -5,7 +5,6 @@
     update_cache: yes
     update_only: yes
   become: yes
-  when: ansible_distribution == 'Fedora'
 
 - name: Enable the RPM Fusion Free repository
   dnf:
@@ -113,7 +112,6 @@
 
 
 - name: Snap Classic Support Is Setup
-  stat:
   path: "/snap"
   register: snap
   become: no
