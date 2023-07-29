@@ -91,13 +91,6 @@
   dnf:
     name:
       - clang
-      - clang10-libs
-      - clang11-libs
-      - clang12-libs
-      - clang13-libs
-      - clang14-libs
-      - clang15-libs
-      - clang
     state: latest
   tags:
     - install
