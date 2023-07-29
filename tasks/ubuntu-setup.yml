@@ -1,0 +1,95 @@
+- name: Update Ubuntu packages
+  become: true
+  apt:
+    upgrade: "safe"
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Install System Packages 1 (build-essential, cmake, pkg-config, pthread)
+  become: true
+  apt:
+    name:
+      - build-essential
+      - cmake
+      - pkg-config
+      - libpthread-stubs0-dev
+  tags:
+    - install
+    - core
+    - ubuntu
+  when: ansible_distribution == 'Ubuntu'
+
+
+- name: Install System Packages 3 (command line tools)
+  become: true
+  apt:
+    name:
+      - zsh
+      - curl
+      - git
+      - lua5.4
+      - unzip
+      - libtool
+      - gettext
+      - jq
+  tags:
+    - install
+    - core
+    - ubuntu
+    when: ansible_distribution == 'Ubuntu'
+
+
+- name: Install System Packages 4 (Extra tools not used that often but necessary for my setup)
+  become: true
+  apt:
+    name:
+      - btop
+      - golang
+      - lsof
+      - i3
+      - ccache
+      - ninja-build
+      - pip
+      - nvidia-settings
+      - pavucontrol
+      - moreutils
+      - flatpack
+      - gnome-software-plugin-flatpak
+  tags:
+    - install
+    - core
+    - ubuntu
+    when: ansible_distribution == 'Ubuntu'
+
+- name: Install Clang
+  become: true
+  apt:
+    name:
+      - clang
+      - clang-13
+      - clang-14
+      - clang-15
+      - clang-16
+      - clangd
+      - clangd-13
+      - clangd-14
+      - clangd-15
+      - clangd-16
+  tags:
+    - install
+    - core
+    - ubuntu
+    when: ansible_distribution == 'Ubuntu'
+
+- name: Install my Art Studio
+  become: true
+  apt:
+    name:
+      - blender
+      - gimp
+      - inkscape
+      - scribus
+  tags:
+    - install
+    - core
+    - ubuntu
+    when: ansible_distribution == 'Ubuntu'

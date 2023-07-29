@@ -11,8 +11,7 @@
 
   pre_tasks:
     - import_tasks: tasks/fedora-setup.yml
-    - import_tasks: tasks/core-setup.yml
-
+    - import_tasks: tasks/ubuntu-setup.yml
   tasks:
     - import_tasks: tasks/ssh.yml
     - import_tasks: tasks/git-setup.yml
@@ -22,7 +21,8 @@
     - import_tasks: tasks/personal-projects.yml
     # - import_tasks: tasks/debugger.yml
     - import_tasks: tasks/dotfiles.yml
-
+    - import_tasks: tasks/flatpack.yml
+    - import_tasks: tasks/snaps.yml
     - import_tasks: tasks/cleanup.yml
 
     - name: Install Emacs and Zsh's latest versions

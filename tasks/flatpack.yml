@@ -1,0 +1,25 @@
+
+
+- name: Add the flathub flatpak repository remote to the user installation
+  community.general.flatpak_remote:
+    name: flathub
+    state: present
+    flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+    method: user
+
+- name: Install multiple packages
+  community.general.flatpak:
+    name:
+      - org.beeref.BeeRef
+      - io.beekeeperstudio.Studio
+      - com.brave.Browser
+      - sh.cider.Cider
+      - com.discordapp.Discord
+      - net.displaycal.DisplayCAL
+      - net.cozic.joplin_desktop
+      - org.kde.krita
+      - org.gnome.World.PikaBackup
+      - com.getpostman.Postman
+      - com.skype.Client
+      - com.slack.Slack
+      - us.zoom.Zoom
