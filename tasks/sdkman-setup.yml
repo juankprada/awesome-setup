@@ -1,10 +1,13 @@
 - name: Check if sdkman is installed
-  shell: test -d ~/.sdkman && echo "yes" || echo "no"
+  shell: test -d {{ ansible_env.HOME }}/.sdkman && echo "yes" || echo "no"
   register: is_sdkman_installed
+
+- name: Remove SDKMan if we haven't installed anything
+  shell: .
 
 - name: Install SDKMan Package Manager
   shell: curl -s "https://get.sdkman.io" | bash
   when : is_sdkman_installed.stdout == "no"
 
 - name: Ensure presense of .zshrc file
-  file: state=touch path=~/.zshrc
+  file: state=touch path={{ ansible_env.HOME }}/.zshrc
