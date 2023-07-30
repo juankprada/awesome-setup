@@ -1,11 +1,5 @@
-- name: Creates directory for fonts
-  file:
-    path: "{{ ansible_env.HOME }}/.local/share/fonts"
-    state: directory
-
-
 - name: Copy Font files
   synchronize:
     src: "{{ playbook_dir }}/fonts"
-    dest: "{{ ansible_env.HOME }}/.local/share/fonts"
+    dest: "{{ ansible_env.HOME }}/.local/share/"
   delegate_to: "{{ inventory_hostname }}"
