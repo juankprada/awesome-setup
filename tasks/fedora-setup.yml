@@ -69,6 +69,7 @@
       - gettext
       - jq
       - stow
+      - tmux
     state: latest
   tags:
     - setup
@@ -124,9 +125,18 @@
     - core
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
 
+
+- name: Is SNAPs Enabled
+  shell: test -d /snap && echo "yes" || echo "no"
+  register: is_snap_enabled
+  tags:
+    - setup
+    - snap
+
 - name: Enable Classic SNAPs support
   shell: ln -s /var/lib/snapd/snap /snap
   become: yes
-  when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+  when:  ansible_distribution  == 'Fedora' and is_snap_enabled.stdout == "no"
   tags:
     - setup
+    - snap
