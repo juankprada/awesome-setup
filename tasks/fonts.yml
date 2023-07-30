@@ -1,0 +1,7 @@
+- name: Copy Font Files
+  copy:
+    src:  "{{ playbook_dir }}/fonts/*"
+    dest: "{{ ansible_env.HOME }}/.local/share/fonts"
+  tags:
+    - fonts
+    - stup

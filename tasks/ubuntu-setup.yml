@@ -37,6 +37,7 @@
       - jq
       - stow
       - emacs
+      - tmux
   tags:
     - setup
     - install
