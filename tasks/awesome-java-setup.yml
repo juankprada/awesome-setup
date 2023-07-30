@@ -1,55 +1,55 @@
 - name: Install latest sable Temurin JDK (Eclipse)
-  shell: source ~/.sdkman/bin/sdkman-init.sh && sdk install java
+  shell: . ~/.sdkman/bin/sdkman-init.sh && sdk install java
   when : is_sdkman_installed.stdout == "yes"
 
 - name: Install Apache ANT
-  shell: source ~/.sdkman/bin/sdkman-init.sh && sdk install ant
+  shell: . ~/.sdkman/bin/sdkman-init.sh && sdk install ant
   when : is_sdkman_installed.stdout == "yes"
 
 - name: Install Apache Maven
-  shell: source ~/.sdkman/bin/sdkman-init.sh && sdk install maven
+  shell: . ~/.sdkman/bin/sdkman-init.sh && sdk install maven
   when : is_sdkman_installed.stdout == "yes"
 
 - name: Install the most aweful build system ever
-  shell: source ~/.sdkman/bin/sdkman-init.sh && sdk install gradle
+  shell: . ~/.sdkman/bin/sdkman-init.sh && sdk install gradle
   when : is_sdkman_installed.stdout == "yes"
 
 - name: Java in a Shell baby!
-  shell: source ~/.sdkman/bin/sdkman-init.sh && sdk install jbang
+  shell: . ~/.sdkman/bin/sdkman-init.sh && sdk install jbang
   when : is_sdkman_installed.stdout == "yes"
 
 - name: Install Java Mission Controll
-  shell: source ~/.sdkman/bin/sdkman-init.sh && sdk install jmc
+  shell: . ~/.sdkman/bin/sdkman-init.sh && sdk install jmc
   when : is_sdkman_installed.stdout == "yes"
 
 - name: Install Java JMeter
-  shell: source ~/.sdkman/bin/sdkman-init.sh && sdk install jmeter
+  shell: . ~/.sdkman/bin/sdkman-init.sh && sdk install jmeter
   when : is_sdkman_installed.stdout == "yes"
 
 - name: Install JReleaser
-  shell: source ~/.sdkman/bin/sdkman-init.sh && sdk install jreleaser
+  shell: . ~/.sdkman/bin/sdkman-init.sh && sdk install jreleaser
   when : is_sdkman_installed.stdout == "yes"
 
 - name: Install Maven Central Repository Tools!
-  shell: source ~/.sdkman/bin/sdkman-init.sh && sdk install mcs
+  shell: . ~/.sdkman/bin/sdkman-init.sh && sdk install mcs
   when : is_sdkman_installed.stdout == "yes"
 
 - name: Install the most awesome Java Web Framework CLI (Quarkus)
-  shell: source ~/.sdkman/bin/sdkman-init.sh && sdk install quarkus
+  shell: . ~/.sdkman/bin/sdkman-init.sh && sdk install quarkus
   when : is_sdkman_installed.stdout == "yes"
 
 - name: Install the most boring Java Web Framework CLI (Spring Boot)
-  shell: source ~/.sdkman/bin/sdkman-init.sh && sdk install quarkus
+  shell: . ~/.sdkman/bin/sdkman-init.sh && sdk install quarkus
   when : is_sdkman_installed.stdout == "yes"
 
 - name: Install a useful JVM Visual Interface
-  shell: source ~/.sdkman/bin/sdkman-init.sh && sdk install visualvm
+  shell: . ~/.sdkman/bin/sdkman-init.sh && sdk install visualvm
   when : is_sdkman_installed.stdout == "yes"
 
 - name: Install Kotlin
-  shell: source ~/.sdkman/bin/sdkman-init.sh && sdk install kotlin
+  shell: . ~/.sdkman/bin/sdkman-init.sh && sdk install kotlin
   when : is_sdkman_installed.stdout == "yes"
 
 - name: Our preferred tool for building Static sites
-  shell: source ~/.sdkman/bin/sdkman-init.sh && sdk install jbake
+  shell: . ~/.sdkman/bin/sdkman-init.sh && sdk install jbake
   when : is_sdkman_installed.stdout == "yes"
