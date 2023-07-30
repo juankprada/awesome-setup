@@ -5,6 +5,8 @@
     state: present
     flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
     method: user
+    tags:
+      - setup
 
 - name: Install multiple packages
   community.general.flatpak:
@@ -24,3 +26,6 @@
       - us.zoom.Zoom
     state: present
     method: user
+    tags:
+      - install
+      - flatpak

@@ -3,6 +3,9 @@
   apt:
     upgrade: "safe"
   when: ansible_distribution == 'Ubuntu'
+  tags:
+    - setup
+
 
 - name: Install System Packages 1 (build-essential, cmake, pkg-config, pthread)
   become: true
@@ -13,6 +16,7 @@
       - pkg-config
       - libpthread-stubs0-dev
   tags:
+    - setup
     - install
     - core
     - ubuntu
@@ -33,6 +37,7 @@
       - jq
       - stow
   tags:
+    - setup
     - install
     - core
     - ubuntu
@@ -56,6 +61,7 @@
       - flatpak
       - gnome-software-plugin-flatpak
   tags:
+    - setup
     - install
     - core
     - ubuntu
@@ -76,6 +82,7 @@
       - clangd-15
       - clangd-16
   tags:
+    - setup
     - install
     - core
     - ubuntu

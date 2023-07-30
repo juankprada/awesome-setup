@@ -6,6 +6,8 @@
     update_only: yes
   become: yes
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+  tags:
+    - setup
 
 
 - name: Enable the RPM Fusion Free repository
@@ -15,6 +17,8 @@
     disable_gpg_check: True
   become: yes
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+  tags:
+    - setup
 
 
 - name: Enable the RPM Fusion Non-Free repository
@@ -24,6 +28,8 @@
     disable_gpg_check: True
   become: yes
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+  tags:
+    - setup
 
 
 - name: Remove unneded packages
@@ -31,6 +37,8 @@
     autoremove: yes
   become: yes
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+  tags:
+    - setup
 
 
 - name: Install System Packages 1 core development tools on Red Hat based Distros
@@ -41,6 +49,7 @@
       - '@Development Libraries'
     state: latest
   tags:
+    - setup
     - install
     - core
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
@@ -62,6 +71,7 @@
       - stow
     state: latest
   tags:
+    - setup
     - install
     - core
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
@@ -83,6 +93,7 @@
       - snapd
     state: latest
   tags:
+    - setup
     - install
     - core
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
@@ -94,6 +105,7 @@
       - clang
     state: latest
   tags:
+    - stup
     - install
     - core
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
@@ -116,3 +128,5 @@
   shell: ln -s /var/lib/snapd/snap /snap
   become: yes
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+  tags:
+    - setup
