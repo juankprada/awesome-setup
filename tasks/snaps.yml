@@ -1,4 +1,5 @@
-- name: Install foo
+- name: Install Visuals Studio Code
   community.general.snap:
     name: code
     classic: true
+  become: true
