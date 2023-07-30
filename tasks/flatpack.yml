@@ -1,5 +1,4 @@
 
-
 - name: Add the flathub flatpak repository remote to the user installation
   community.general.flatpak_remote:
     name: flathub
@@ -23,3 +22,5 @@
       - com.skype.Client
       - com.slack.Slack
       - us.zoom.Zoom
+    state: present
+    method: user
