@@ -1,7 +1,11 @@
-- name: Copy Font Files
-  copy:
-    src:  "{{ playbook_dir }}/fonts/*"
+- name: Creates directory for fonts
+  file:
+    path: "{{ ansible_env.HOME }}/.local/share/fonts"
+    state: directory
+
+
+- name: Copy Font files
+  synchronize:
+    src: "{{ playbook_dir }}/fonts"
     dest: "{{ ansible_env.HOME }}/.local/share/fonts"
-  tags:
-    - fonts
-    - stup
+  delegate_to: "{{ inventory_hostname }}"
