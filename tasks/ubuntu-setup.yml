@@ -36,6 +36,7 @@
       - gettext
       - jq
       - stow
+      - emacs
   tags:
     - setup
     - install
