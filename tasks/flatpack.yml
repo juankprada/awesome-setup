@@ -5,8 +5,8 @@
     state: present
     flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
     method: user
-    tags:
-      - setup
+  tags:
+    - setup
 
 - name: Install multiple packages
   community.general.flatpak:
