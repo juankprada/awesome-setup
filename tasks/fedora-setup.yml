@@ -47,6 +47,7 @@
     name:
       - '@Development Tools'
       - '@Development Libraries'
+      - gtk2-devel
     state: latest
   tags:
     - setup
@@ -54,6 +55,32 @@
     - core
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
 
+
+- name: Install Xmonad and tools for my Desktop Environment
+  become: true
+  dnf:
+    name:
+      - xmonad
+      - xrdb
+      - xset
+      - xsettingsd
+      - xdotool
+      - xmobar
+      - alacritty
+      - dmenu
+      - slock
+      - light
+      - nitrogen
+      - lxappearance
+      - xscreensaver
+      - autorandr
+      - xfce4-power-manager
+      - picom
+      - arandr
+      - pavucontrol
+      - volumeicon
+      - shutter
+      #find somethin for Bluetooth
 
 - name: Install System Packages 2 (zsh, emacs, curl, git, lua, unzip, libtool, libtool, gettext)
   become: true
@@ -70,6 +97,7 @@
       - jq
       - stow
       - tmux
+
     state: latest
   tags:
     - setup
@@ -89,7 +117,6 @@
       - ninja-build
       - python3-pip
       - nvidia-settings
-      - pavucontrol
       - moreutils
       - snapd
     state: latest
@@ -140,3 +167,54 @@
   tags:
     - setup
     - snap
+
+- name: Clone Trayer repository
+  git:
+    clone: yes
+    repo: 'git@github.com:sargon/trayer-srg.git'
+    dest: "{{ projects}}/trayer"
+    accept_hostkey: yes
+    key_file: "{{ lookup('env', 'HOME') }}/.ssh/{{ssh_key_name}}"
+  tags:
+    - setup
+  become: no
+
+- name: Build Trayer
+  shell: cd {{ projects }}/trayer && ./configure && make
+  tags:
+    - setup
+
+- name: Install Trayer
+  shell: cd {{ projects }}/trayer && make install
+  become: yes
+
+
+
+## TODO
+## There are things here that may be needed.
+# ** XMonad
+
+# * Panel (xmobar)
+
+# * lxsession (polkit) - authentication agents | We may not need it as Fedora i3 may have one setup
+# * nitrogen
+# * picom
+# * Run Luncher (DMenu/Rofi) | Find something like Gnome Do
+# * nm-applet | Really useful
+# * voluemicon (pavucontrol??)
+# * trayer * System Tray
+# * emacs daemon
+# * clipboard manager
+# * urxvt/xterm ?
+# * music plaer cmus/mp3blaster
+# * irc client
+# * Notification sytem (Dunst/Notify OSD)
+# * Loggin Manager (LightDM)
+# * File Manger (PCManFM/Krusader/Find other/Thunar)
+# * LXAppearance
+# * Bluetooth (BLuez)x
+# * Scrot for PrintScreen
+# *  WMDOCKER Window Maker docker?
+
+
+## If check if Krusader may need too many KDE libs
