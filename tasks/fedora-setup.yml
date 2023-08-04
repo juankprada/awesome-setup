@@ -80,6 +80,7 @@
       - pavucontrol
       - volumeicon
       - shutter
+      - dunst
       #find somethin for Bluetooth
 
 - name: Install System Packages 2 (zsh, emacs, curl, git, lua, unzip, libtool, libtool, gettext)

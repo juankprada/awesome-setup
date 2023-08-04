@@ -1,0 +1,13 @@
+My setup is still pending on the following
+
+- Notification daemon and OSD (or alternatives) (Currently considering Dunst)
+- Bluetooth widget/system tray icon
+- Key bindings for multimedia and other actions
+- Correctly handle multiple inputs
+- Correctly configure picom for effects and speed.
+- Correct Screen colors based on color temperature (Check out Redshift and Redshift-gtk)
+
+-- To Consider
+-- Should I rely on .xsessions instead of xmonad to start services?
+-- Check stalonetray instead of Trayer (stalonetray is in fedora repos)
+-- check https://starship.rs/ instad of ohmyzsh
