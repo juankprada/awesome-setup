@@ -151,6 +151,7 @@
   tags:
     - install
     - core
+    - art
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
 
 
@@ -172,10 +173,8 @@
 - name: Clone Trayer repository
   git:
     clone: yes
-    repo: 'git@github.com:sargon/trayer-srg.git'
+    repo: 'https://github.com/sargon/trayer-srg.git'
     dest: "{{ projects}}/trayer"
-    accept_hostkey: yes
-    key_file: "{{ lookup('env', 'HOME') }}/.ssh/{{ssh_key_name}}"
   tags:
     - setup
   become: no
