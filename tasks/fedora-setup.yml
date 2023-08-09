@@ -73,15 +73,20 @@
       - nitrogen
       - lxappearance
       - xscreensaver
-      - autorandr
       - xfce4-power-manager
       - picom
       - arandr
+      - autorandr
       - pavucontrol
       - volumeicon
       - shutter
-      - dunst
-      #find somethin for Bluetooth
+      - dunst # notifications
+      - blueman
+      - xorg-x11-xinit-session
+      - lxappearance
+      - rofi
+      - unclutter-xfixes #unclutter
+      - jgmenu
 
 - name: Install System Packages 2 (zsh, emacs, curl, git, lua, unzip, libtool, libtool, gettext)
   become: true
@@ -98,7 +103,7 @@
       - jq
       - stow
       - tmux
-
+      - flatpak
     state: latest
   tags:
     - setup
