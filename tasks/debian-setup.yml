@@ -96,6 +96,7 @@
       - jgmenu
       - arc-theme
       - papirus-icon-theme
+  when: ansible_distribution == 'Debian'
 
 
 - name: Install System Packages 3 (command line tools)
