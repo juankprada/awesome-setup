@@ -1,55 +1,61 @@
+- name: Check again if sdkman is installed
+  shell: test -d {{ ansible_env.HOME }}/.sdkman && echo "yes" || echo "no"
+  register: is_sdkman_installed2
+  tags:
+    - setup
+
 - name: Install latest sable Temurin JDK (Eclipse)
   shell: . {{ ansible_env.HOME }}/.sdkman/bin/sdkman-init.sh && sdk install java
-  when : is_sdkman_installed.stdout == "yes"
+  when : is_sdkman_installed2.stdout == "yes"
 
 - name: Install Apache ANT
   shell: . {{ ansible_env.HOME }}/.sdkman/bin/sdkman-init.sh && sdk install ant
-  when : is_sdkman_installed.stdout == "yes"
+  when : is_sdkman_installed2.stdout == "yes"
 
 - name: Install Apache Maven
   shell: . {{ ansible_env.HOME }}/.sdkman/bin/sdkman-init.sh && sdk install maven
-  when : is_sdkman_installed.stdout == "yes"
+  when : is_sdkman_installed2.stdout == "yes"
 
 - name: Install the most aweful build system ever
   shell: . {{ ansible_env.HOME }}/.sdkman/bin/sdkman-init.sh && sdk install gradle
-  when : is_sdkman_installed.stdout == "yes"
+  when : is_sdkman_installed2.stdout == "yes"
 
 - name: Java in a Shell baby!
   shell: . {{ ansible_env.HOME }}/.sdkman/bin/sdkman-init.sh && sdk install jbang
-  when : is_sdkman_installed.stdout == "yes"
+  when : is_sdkman_installed2.stdout == "yes"
 
 - name: Install Java Mission Controll
   shell: . {{ ansible_env.HOME }}/.sdkman/bin/sdkman-init.sh && sdk install jmc
-  when : is_sdkman_installed.stdout == "yes"
+  when : is_sdkman_installed2.stdout == "yes"
 
 - name: Install Java JMeter
   shell: . {{ ansible_env.HOME }}/.sdkman/bin/sdkman-init.sh && sdk install jmeter
-  when : is_sdkman_installed.stdout == "yes"
+  when : is_sdkman_installed2.stdout == "yes"
 
 - name: Install JReleaser
   shell: . {{ ansible_env.HOME }}/.sdkman/bin/sdkman-init.sh && sdk install jreleaser
-  when : is_sdkman_installed.stdout == "yes"
+  when : is_sdkman_installed2.stdout == "yes"
 
 - name: Install Maven Central Repository Tools!
   shell: . {{ ansible_env.HOME }}/.sdkman/bin/sdkman-init.sh && sdk install mcs
-  when : is_sdkman_installed.stdout == "yes"
+  when : is_sdkman_installed2.stdout == "yes"
 
 - name: Install the most awesome Java Web Framework CLI (Quarkus)
   shell: . {{ ansible_env.HOME }}/.sdkman/bin/sdkman-init.sh && sdk install quarkus
-  when : is_sdkman_installed.stdout == "yes"
+  when : is_sdkman_installed2.stdout == "yes"
 
 - name: Install the most boring Java Web Framework CLI (Spring Boot)
   shell: . {{ ansible_env.HOME }}/.sdkman/bin/sdkman-init.sh && sdk install quarkus
-  when : is_sdkman_installed.stdout == "yes"
+  when : is_sdkman_installed2.stdout == "yes"
 
 - name: Install a useful JVM Visual Interface
   shell: . {{ ansible_env.HOME }}/.sdkman/bin/sdkman-init.sh && sdk install visualvm
-  when : is_sdkman_installed.stdout == "yes"
+  when : is_sdkman_installed2.stdout == "yes"
 
 - name: Install Kotlin
   shell: . {{ ansible_env.HOME }}/.sdkman/bin/sdkman-init.sh && sdk install kotlin
-  when : is_sdkman_installed.stdout == "yes"
+  when : is_sdkman_installed2.stdout == "yes"
 
 - name: Our preferred tool for building Static sites
   shell: . {{ ansible_env.HOME }}/.sdkman/bin/sdkman-init.sh && sdk install jbake
-  when : is_sdkman_installed.stdout == "yes"
+  when : is_sdkman_installed2.stdout == "yes"

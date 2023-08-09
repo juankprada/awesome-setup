@@ -4,6 +4,7 @@
   tags:
     - setup
 
+
 - name: Install SDKMan Package Manager
   shell: curl -s "https://get.sdkman.io" | bash
   when : is_sdkman_installed.stdout == "no"

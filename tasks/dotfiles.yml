@@ -1,11 +1,12 @@
 - name: Cloning .dotfiles
-  ansible.builtin.git:
+  git:
+    clone: yes
     repo: 'git@github.com:juankprada/dotfiles.git'
     dest: "{{ projects }}/dotfiles"
-    recursive: yes
     update: yes
     accept_hostkey: yes
     version: main
+    key_file: "{{ lookup('env', 'HOME') }}/.ssh/{{ssh_key_name}}"
   tags:
     - install
     - dotfiles

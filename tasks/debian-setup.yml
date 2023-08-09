@@ -1,0 +1,178 @@
+- name: Update Debian packages
+  become: true
+  apt:
+    upgrade: "safe"
+  when: ansible_distribution == 'Debian'
+  tags:
+    - setup
+
+- name: Add specified repository into sources list 1
+  ansible.builtin.apt_repository:
+    repo: deb http://deb.debian.org/debian bookworm non-free non-free-firmware
+    state: present
+  when: ansible_distribution == 'Debian'
+
+- name: Add specified repository into sources list 2
+  ansible.builtin.apt_repository:
+    repo: deb-src http://deb.debian.org/debian bookworm non-free non-free-firmware
+    state: present
+  when: ansible_distribution == 'Debian'
+
+- name: Add specified repository into sources list 3
+  ansible.builtin.apt_repository:
+    repo: deb http://deb.debian.org/debian-security bookworm-security non-free non-free-firmware
+    state: present
+  when: ansible_distribution == 'Debian'
+
+- name: Add specified repository into sources list 4
+  ansible.builtin.apt_repository:
+    repo: deb-src http://deb.debian.org/debian-security bookworm-security non-free non-free-firmware
+    state: present
+  when: ansible_distribution == 'Debian'
+
+- name: Add specified repository into sources list 5
+  ansible.builtin.apt_repository:
+    repo: deb http://deb.debian.org/debian bookworm-updates non-free non-free-firmware
+    state: present
+  when: ansible_distribution == 'Debian'
+
+- name: Add specified repository into sources list 6
+  ansible.builtin.apt_repository:
+    repo: deb-src http://deb.debian.org/debian bookworm-updates non-free non-free-firmware
+    state: present
+  when: ansible_distribution == 'Debian'
+
+- name: Update all packages to their latest version
+  ansible.builtin.apt:
+    name: "*"
+    state: latest
+  when: ansible_distribution == 'Debian'
+
+- name: Install System Packages 1 (build-essential, cmake, pkg-config, pthread)
+  become: true
+  apt:
+    name:
+      - build-essential
+      - cmake
+      - pkg-config
+      - libpthread-stubs0-dev
+  tags:
+    - setup
+    - install
+    - core
+    - debian
+  when: ansible_distribution == 'Debian'
+
+- name: Install Xmonad and tools for my Desktop Environment
+  become: true
+  apt:
+    name:
+      - xmonad
+      - x11-xserver-utils
+      - xsettingsd
+      - xdotool
+      - libx11
+      - libxft
+      - libxinerama
+      - libxrandr
+      - libxss
+      - alacritty
+      - dmenu
+      - slock
+      - light
+      - nitrogen
+      - xscreensaver
+      - xfce4-power-manager
+      - picom
+      - arandr
+      - autorandr
+      - pavucontrol
+      - volumeicon
+      - shutter
+      - dunst
+      - blueman
+      - rofi
+      - unclutter
+      - jgmenu
+      - arc-theme
+      - papirus-icon-theme
+
+
+- name: Install System Packages 3 (command line tools)
+  become: true
+  apt:
+    name:
+      - emacs
+      - curl
+      - git
+      - lua5.4
+      - unzip
+      - libtool
+      - gettext
+      - jq
+      - stow
+      - tmux
+      - flatpak
+  tags:
+    - setup
+    - install
+    - core
+    - debian
+  when: ansible_distribution == 'Debian'
+
+
+- name: Install System Packages 4 (Extra tools not used that often but necessary for my setup)
+  become: true
+  apt:
+    name:
+      - btop
+      - golang
+      - lsof
+      - i3
+      - ccache
+      - ninja-build
+      - pip
+      - nvidia-settings
+      - moreutils
+      - gnome-software-plugin-flatpak
+  tags:
+    - setup
+    - install
+    - core
+    - debian
+  when: ansible_distribution == 'Debian'
+
+- name: Install Clang
+  become: true
+  apt:
+    name:
+      - clang
+      - clang-13
+      - clang-14
+      - clang-15
+      - clang-16
+      - clangd
+      - clangd-13
+      - clangd-14
+      - clangd-15
+      - clangd-16
+  tags:
+    - setup
+    - install
+    - core
+    - debian
+  when: ansible_distribution == 'Debian'
+
+- name: Install my Art Studio
+  become: true
+  apt:
+    name:
+      - blender
+      - gimp
+      - inkscape
+      - scribus
+  tags:
+    - install
+    - core
+    - debian
+  when: ansible_distribution == 'Debian'

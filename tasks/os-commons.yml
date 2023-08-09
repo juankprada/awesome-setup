@@ -1,0 +1,17 @@
+- name: Clone Trayer repository
+  git:
+    clone: yes
+    repo: 'https://github.com/sargon/trayer-srg.git'
+    dest: "{{ projects}}/trayer"
+  tags:
+    - setup
+  become: no
+
+- name: Build Trayer
+  shell: cd {{ projects }}/trayer && ./configure && make
+  tags:
+    - setup
+
+- name: Install Trayer
+  shell: cd {{ projects }}/trayer && make install
+  become: yes

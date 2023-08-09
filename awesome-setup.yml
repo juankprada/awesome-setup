@@ -12,6 +12,8 @@
   pre_tasks:
     - import_tasks: tasks/fedora-setup.yml
     - import_tasks: tasks/ubuntu-setup.yml
+    - import_tasks: tasks/debian-setup.yml
+    - import_tasks: tasks/os-commons.yml
   tasks:
     - import_tasks: tasks/ssh.yml
     - import_tasks: tasks/git-setup.yml
