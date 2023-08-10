@@ -2,12 +2,8 @@
 - name: Setup my super awesome Dev environment
   hosts: localhost
   connection: local
-  vars:
-    source_key: "./.ssh/id_ed25519"
-    ssh_key_name: "id_ed25519"
-    dest_key: "{{ lookup('env', 'HOME') }}/.ssh/{{ ssh_key_name }}"
-    projects: "{{ lookup('env', 'HOME') }}/Documents/Projects"
-    ssh_key: "{{ dest_key }}"
+  vars_files:
+    - ./vars.yml
 
   pre_tasks:
     - import_tasks: tasks/fedora-setup.yml
@@ -15,7 +11,6 @@
     - import_tasks: tasks/debian-setup.yml
     - import_tasks: tasks/os-commons.yml
   tasks:
-    - import_tasks: tasks/ssh.yml
     - import_tasks: tasks/git-setup.yml
     - import_tasks: tasks/sdkman-setup.yml
     - import_tasks: tasks/awesome-java-setup.yml

@@ -1,0 +1,7 @@
+---
+- name: Setup SSH and SSH Agent
+  hosts: localhost
+  vars_files:
+    - ./vars.yml
+  tasks:
+    - import_tasks: tasks/ssh.yml

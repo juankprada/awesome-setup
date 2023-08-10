@@ -1,0 +1,7 @@
+---
+# Set all variables needed by the playbooks here
+ssh_key_name: "id_ed25519"
+source_key: "./.ssh/{{ ssh_key_name }}"
+dest_key: "{{ lookup('env', 'HOME') }}/.ssh/{{ ssh_key_name }}"
+projects: "{{ lookup('env', 'HOME') }}/Documents/Projects"
+ssh_key: "{{ dest_key }}"

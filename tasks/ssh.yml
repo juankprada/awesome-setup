@@ -45,9 +45,13 @@
     - install
   become: no
 
+- name: Add Github to SSH known hosts
+  shell: "ssh-keyscan -t ecdsa github.com >> ~/.ssh/known_hosts"
+  become: no
+
 # - name: Add key to SSH Agent
 #   shell: "eval `ssh-agent -s` && ssh-add $HOME/.ssh/id_ed25519 && ssh-add -l"
-#   #script: ./setup.sh
+#   script: ./setup.sh
 #   tags:
 #     - dotfiles
 #     - ssh
