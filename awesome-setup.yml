@@ -19,5 +19,5 @@
     # - import_tasks: tasks/debugger.yml
     - import_tasks: tasks/dotfiles.yml
     - import_tasks: tasks/flatpack.yml
-    - import_tasks: tasks/snaps.yml
+    #- import_tasks: tasks/snaps.yml
     - import_tasks: tasks/fonts.yml
