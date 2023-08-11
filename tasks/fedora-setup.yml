@@ -60,6 +60,7 @@
   become: true
   dnf:
     name:
+      - sddm
       - xmonad
       - xrdb
       - xset
@@ -89,7 +90,7 @@
       - jgmenu
       - arc-theme
       - papirus-icon-theme
-
+  when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
 
 - name: Install System Packages 2 (zsh, emacs, curl, git, lua, unzip, libtool, libtool, gettext)
   become: true
@@ -105,6 +106,7 @@
       - jq
       - stow
       - tmux
+      - qalculate-gtk
       - flatpak
     state: latest
   tags:
@@ -162,49 +164,22 @@
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
 
 
-- name: Is SNAPs Enabled
-  shell: test -d /snap && echo "yes" || echo "no"
-  register: is_snap_enabled
-  tags:
-    - setup
-    - snap
-
-- name: Enable Classic SNAPs support
-  shell: ln -s /var/lib/snapd/snap /snap
-  become: yes
-  when:  ansible_distribution  == 'Fedora' and is_snap_enabled.stdout == "no"
-  tags:
-    - setup
-    - snap
-
-
-
-
 ## TODO
 ## There are things here that may be needed.
-# ** XMonad
-
-# * Panel (xmobar)
 
 # * lxsession (polkit) - authentication agents | We may not need it as Fedora i3 may have one setup
-# * nitrogen
-# * picom
-# * Run Luncher (DMenu/Rofi) | Find something like Gnome Do
-# * nm-applet | Really useful
+
+
+
+
 # * voluemicon (pavucontrol??)
-# * trayer * System Tray
+
 # * emacs daemon
 # * clipboard manager
 # * urxvt/xterm ?
 # * music plaer cmus/mp3blaster
 # * irc client
-# * Notification sytem (Dunst/Notify OSD)
-# * Loggin Manager (LightDM)
 # * File Manger (PCManFM/Krusader/Find other/Thunar)
 # * LXAppearance
-# * Bluetooth (BLuez)x
 # * Scrot for PrintScreen
 # *  WMDOCKER Window Maker docker?
-
-
-## If check if Krusader may need too many KDE libs

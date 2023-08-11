@@ -67,6 +67,7 @@
   become: true
   apt:
     name:
+      - sddm
       - xmonad
       - x11-xserver-utils
       - xsettingsd
@@ -134,8 +135,8 @@
       - ninja-build
       - pip
       - nvidia-settings
+      - pavucontrol
       - moreutils
-      - gnome-software-plugin-flatpak
   tags:
     - setup
     - install

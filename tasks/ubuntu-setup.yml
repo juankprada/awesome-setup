@@ -6,7 +6,6 @@
   tags:
     - setup
 
-
 - name: Install System Packages 1 (build-essential, cmake, pkg-config, pthread)
   become: true
   apt:
@@ -22,12 +21,47 @@
     - ubuntu
   when: ansible_distribution == 'Ubuntu'
 
+- name: Install Xmonad and tools for my Desktop Environment
+  become: true
+  apt:
+    name:
+      - sddm
+      - xmonad
+      - x11-xserver-utils
+      - xsettingsd
+      - xdotool
+      - libx11
+      - libxft
+      - libxinerama
+      - libxrandr
+      - libxss
+      - alacritty
+      - dmenu
+      - slock
+      - light
+      - nitrogen
+      - xscreensaver
+      - xfce4-power-manager
+      - picom
+      - arandr
+      - autorandr
+      - pavucontrol
+      - volumeicon
+      - shutter
+      - dunst
+      - blueman
+      - rofi
+      - unclutter
+      - jgmenu
+      - arc-theme
+      - papirus-icon-theme
+  when: ansible_distribution == 'Ubuntu'
 
 - name: Install System Packages 3 (command line tools)
   become: true
   apt:
     name:
-      - zsh
+      - emacs
       - curl
       - git
       - lua5.4
@@ -36,8 +70,8 @@
       - gettext
       - jq
       - stow
-      - emacs
       - tmux
+      - flatpak
   tags:
     - setup
     - install
@@ -60,8 +94,6 @@
       - nvidia-settings
       - pavucontrol
       - moreutils
-      - flatpak
-      - gnome-software-plugin-flatpak
   tags:
     - setup
     - install
