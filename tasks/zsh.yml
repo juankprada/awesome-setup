@@ -1,24 +1,29 @@
 - name: Change my Shell
   shell: chsh -s `which zsh`
   become: no
+
 - name: Check for Oh-my-zsh exists
   stat:
     path: "{{ ansible_env.HOME }}/.oh-my-zsh/"
   register: ohmyzsh
   become: no
+
 - name: Task name
   debug:
     msg: "The file or directory exists"
   when: ohmyzsh.stat.exists
+
 - name: Install Oh-my-zsh
   shell: curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sh
   become: no
   when: not ohmyzsh.stat.exists
+
 - name: Install Zsh plugin for Auato-Suggestions
   ansible.builtin.git:
     repo: https://github.com/zsh-users/zsh-autosuggestions
     dest: {{ ansible_env.HOME }}/.oh-my-zsh/plugins/zsh-autosuggestions
   become: no
+
 - name: Update zshrc file
   shell: grep -qxF 'plugins=(zsh-autosuggestions)' {{ ansible_env.HOME }}/.zshrc || echo 'plugins=(zsh-autosuggestions)' >> {{ ansible_env.HOME }}/.zshrc
   become: no

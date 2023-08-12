@@ -29,3 +29,20 @@
   tags:
     - install
     - flatpak
+
+- name: Install Extra games
+  community.general.flatpak:
+    name:
+      - org.citra_emu.citra
+      - com.heroicgameslauncher.hgl
+      - com.snes9x.Snes9x
+      - dev.goats.xivlauncher
+      - com.shatteredpixel.shatteredpixeldungeon
+      - net.openra.OpenRA
+      - com.frogatto.Frogatto
+
+    state: present
+    method: user
+  tags:
+    - install
+    - flatpak

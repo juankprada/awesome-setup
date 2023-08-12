@@ -1,0 +1,14 @@
+- name: Check if Staship is installed
+  stat:
+    path: "/usr/local/bin/starship"
+  register: starship
+  become: no
+
+- name: Install Starship shell promtp
+  become: true
+  expect:
+    command: curl -sS https://starship.rs/install.sh | sh
+    responses:
+      Question:
+        - 'y'
+  when: not starship.stat.exists

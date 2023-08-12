@@ -62,3 +62,18 @@
     dest: "{{ system_sounds_path }}"
     force: yes
   when: os_sounds_path.stat.exists
+
+
+- name: Clone SSDM Theme
+  git:
+    clone: yes
+    repo: 'https://gitlab.com/juankprada/multicolor-sddm-theme.git'
+    dest: "{{ projects }}/multicolor-sddm-theme"
+  tags:
+    - setup
+  become: no
+
+- name: Install SSDM Theme
+  file:
+    path: "{{ projects }}/multicolor-sddm-theme"
+    dest: "/usr/share/sddm/themes/"

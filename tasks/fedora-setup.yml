@@ -51,6 +51,7 @@
       - '@Multimedia'
       - gtk2-devel
     state: latest
+    allowerasing: true
   tags:
     - setup
     - install
@@ -92,8 +93,12 @@
       - jgmenu
       - arc-theme
       - papirus-icon-theme
-      - ffmpeg-free
-      - ffmpeg
+  when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+
+- name: Swapp ffmpeg packages
+  become: true
+  shell: |
+    dnf swap ffmpeg-free ffmpeg --allowerasing
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
 
 - name: Install System Packages 2 (zsh, emacs, curl, git, lua, unzip, libtool, libtool, gettext)
@@ -101,6 +106,7 @@
   dnf:
     name:
       - emacs
+      - bat
       - curl
       - git
       - lua
@@ -133,8 +139,8 @@
       - moreutils
       - rpmfusion-free-release-tainted
       - rpmfusion-nonfree-release-tainted
-      - libdvdcss
-      - snapd
+      - dnfdragora
+      - exa
     state: latest
   tags:
     - setup
@@ -152,6 +158,7 @@
       - nvidia-settings
       - xorg-x11-drv-nvidia-power
       - vulkan
+      - vulkan-tools
       - xorg-x11-drv-nvidia-cuda-libs
       - nvidia-vaapi-driver
       - libva-utils
@@ -161,7 +168,6 @@
     - install
     - core
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
-
 
 - name: Install Clang
   become: true
@@ -188,18 +194,34 @@
     - install
     - core
     - art
+    - 0ad
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
 
 
-- name: Self generate key and certificate for Secure Boot
-  shell: |
-    /usr/sbin/kmodgenca
-  when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+- name: Install Games
+  become: true
+  dnf:
+    name:
+      - steam
+      - wesnoth
+      - gnome-chess
 
-- name: Importing Secure Boot key
-  shell: |
-    mokutil --import /etc/pki/akmods/certs/public_key.der
-  when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+# - name: Self generate key and certificate for Secure Boot
+#   become: true
+#   shell: |
+#     /usr/sbin/kmodgenca
+#   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+
+# - name: Importing Secure Boot key
+#   become: true
+#   expect:
+#     command: mokutil --import /etc/pki/akmods/certs/public_key.der
+#     responses:
+#       Question:
+#         - racilwayfe
+#         - racilwayfe
+
+#   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
 
 - name: Enable Nvidia Suspend scripts
   systemd:
