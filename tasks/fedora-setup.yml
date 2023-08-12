@@ -47,6 +47,8 @@
     name:
       - '@Development Tools'
       - '@Development Libraries'
+      - '@Sound and Video'
+      - '@Multimedia'
       - gtk2-devel
     state: latest
   tags:
@@ -90,6 +92,8 @@
       - jgmenu
       - arc-theme
       - papirus-icon-theme
+      - ffmpeg-free
+      - ffmpeg
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
 
 - name: Install System Packages 2 (zsh, emacs, curl, git, lua, unzip, libtool, libtool, gettext)
@@ -126,8 +130,10 @@
       - ccache
       - ninja-build
       - python3-pip
-      - nvidia-settings
       - moreutils
+      - rpmfusion-free-release-tainted
+      - rpmfusion-nonfree-release-tainted
+      - libdvdcss
       - snapd
     state: latest
   tags:
@@ -135,6 +141,27 @@
     - install
     - core
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+
+- name: Install Nvidia Packages
+  become: true
+  dnf:
+    name:
+      - akmod-nvidia
+      - xorg-x11-drv-nvidia-cuda
+      - nvidia-vaapi-driver
+      - nvidia-settings
+      - xorg-x11-drv-nvidia-power
+      - vulkan
+      - xorg-x11-drv-nvidia-cuda-libs
+      - nvidia-vaapi-driver
+      - libva-utils
+      - vdpauinfo
+  tags:
+    - setup
+    - install
+    - core
+  when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+
 
 - name: Install Clang
   become: true
@@ -164,6 +191,33 @@
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
 
 
+- name: Self generate key and certificate for Secure Boot
+  shell: |
+    /usr/sbin/kmodgenca
+  when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+
+- name: Importing Secure Boot key
+  shell: |
+    mokutil --import /etc/pki/akmods/certs/public_key.der
+  when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+
+- name: Enable Nvidia Suspend scripts
+  systemd:
+    name: nvidia-suspend
+    enabled: true
+  become: yes
+
+- name: enable Nvidia Resume scripts
+  systemd:
+    name: nvidia-resume
+    enabled: true
+  become: yes
+
+- name: enable Nvidia Hibernate Scripts
+  systemd:
+    name: nvidia-hibernate
+    enabled: true
+  become: yes
 ## TODO
 ## There are things here that may be needed.
 
