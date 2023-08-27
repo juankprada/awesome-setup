@@ -77,3 +77,13 @@
   file:
     path: "{{ projects }}/multicolor-sddm-theme"
     dest: "/usr/share/sddm/themes/"
+
+- name: Determine if Numphy Fix has been setup
+  stat:
+    path: /etc/modprobe.d/hid_apple.conf
+  register: numphy_fix
+
+- name: Fix Numphy 75 Air on Linux
+  become: yes
+  shell: echo 'options hid_apple fnmode=0' | sudo tee -a /etc/modprobe.d/hid_apple.conf
+  when: numphy_fix.stat.exists == False

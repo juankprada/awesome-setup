@@ -93,6 +93,8 @@
       - jgmenu
       - arc-theme
       - papirus-icon-theme
+      - py3status
+      - renameutils
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
 
 - name: Swapp ffmpeg packages
@@ -105,6 +107,15 @@
   become: true
   dnf:
     name:
+      - xinput
+      - lxpolkit
+      - rxvt-unicode
+      - weechat
+      - ibus-mozc
+      - mozc
+      - mpd
+      - ncmpcpp
+      - cabal-install # for haskell
       - emacs
       - bat
       - curl
@@ -118,6 +129,7 @@
       - tmux
       - qalculate-gtk
       - flatpak
+      - python3-websocket-client
     state: latest
   tags:
     - setup
@@ -141,6 +153,7 @@
       - rpmfusion-nonfree-release-tainted
       - dnfdragora
       - exa
+      - bat
     state: latest
   tags:
     - setup
