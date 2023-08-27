@@ -219,11 +219,21 @@
       - wesnoth
       - gnome-chess
 
+# - name: Public KMOD key exists?
+#   stat:
+#     path: "/etc/pki/akmods/certs/public_key.der"
+#   register: kmodkey
+#   tags:
+#     - install
+#     - core
+#   become: yes
+#   when:  ansible_distribution == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+
 # - name: Self generate key and certificate for Secure Boot
 #   become: true
 #   shell: |
 #     /usr/sbin/kmodgenca
-#   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+#   when: kmodkey.stat.exists == False
 
 # - name: Importing Secure Boot key
 #   become: true
@@ -231,10 +241,9 @@
 #     command: mokutil --import /etc/pki/akmods/certs/public_key.der
 #     responses:
 #       Question:
-#         - racilwayfe
-#         - racilwayfe
-
-#   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+#         - lookup("env", "ANSIBLE_BECOME_PASSWORD")
+#         - lookup("env", "ANSIBLE_BECOME_PASSWORD")
+#   when: when: kmodkey.stat.exists == False
 
 - name: Enable Nvidia Suspend scripts
   systemd:
@@ -253,6 +262,33 @@
     name: nvidia-hibernate
     enabled: true
   become: yes
+
+- name: Fix Numphy  setup correctly on modprobe
+  shell: |
+    grep -qxF 'options hid_apple fnmode=0' /etc/modprobe.d/hid_apple.conf || echo 'options hid_apple fnmode=0' >> /etc/modprobe.d/hid_apple.conf
+  tags:
+    - install
+    - core
+  become: yes
+  when:  ansible_distribution == 'Fedora' or ansible_distribution == 'CentOs' or  ansible_distribution  == 'RedHat'
+
+- name: Check if Numphy is setup correctly on dracut
+  stat:
+    path: "/etc/dracut.conf.d/hid_apple.conf"
+  register: numphy
+  tags:
+    - install
+    - core
+  become: yes
+  when:  ansible_distribution == 'Fedora' or ansible_distribution == 'CentOs' or  ansible_distribution  == 'RedHat'
+
+- name: Fix Numphy keyboard on Fedora
+  become: true
+  shell: |
+    echo "install_items+=/etc/modprobe.d/hid_apple.conf" >> /etc/dracut.conf.d/hid_apple.conf && dracut --force
+  when: numphy.stat.exists == False
+
+
 ## TODO
 ## There are things here that may be needed.
 
