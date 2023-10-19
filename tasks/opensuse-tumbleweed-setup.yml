@@ -1,0 +1,182 @@
+- name: Update openSuse Tumbleweed
+  zypper:
+    name: '*'
+    state: dist-upgrade
+    update_cache: true
+  become: yes
+  when:  ansible_distribution  == 'openSUSE Tumbleweed'
+  tags:
+    - setup
+
+
+
+- name: Add PACKMAN repository
+  community.general.zypper_repository:
+    name: packman
+    repo: 'https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed/'
+    state: present
+    runrefresh: true
+  become: yes
+  when:  ansible_distribution  == 'openSUSE Tumbleweed'
+  tags:
+    - setup
+
+
+- name: Add NVIDIA repository
+  community.general.zypper_repository:
+    name: nvidia-repo
+    repo: 'https://download.nvidia.com/opensuse/tumbleweed'
+    state: present
+    runrefresh: true
+    auto_import_keys: true
+  become: yes
+  when:  ansible_distribution  == 'openSUSE Tumbleweed'
+  tags:
+    - setup
+
+
+- name: Update Installed Packages allowing  Vendor Change
+  zypper:
+    name: '*'
+    state: dist-upgrade
+    allow_vendor_change: true
+    update_cache: true
+  become: yes
+  when:  ansible_distribution  == 'openSUSE Tumbleweed'
+  tags:
+    - setup
+
+
+- name: Install Multimedia Codecs
+  zypper:
+    name:
+      - ffmpeg
+      - gstreamer-plugins-good
+      - gstreamer-plugins-bad
+      - gstreamer-plugins-ugly
+      - gstreamer-plugins-libav
+      - libavcodec-full
+      - vlc-codecs
+    state: latest
+    allow_vendor_change: true
+    extra_args: '--from packman'
+  become: yes
+  when:  ansible_distribution  == 'openSUSE Tumbleweed'
+  tags:
+    - setup
+
+
+- name: Install System Packages 2 (zsh, emacs, curl, git, lua, unzip, libtool, libtool, gettext)
+  become: true
+  zypper:
+    name:
+      - ibus
+      - ibus-mozc
+      - mozc
+      - emacs
+      - bat
+      - curl
+      - git
+      - lua54
+      - unzip
+      - libtool
+      - gettext-runtime
+      - jq
+      - stow
+      - tmux
+      - flatpak
+      - python3-websocket-client
+      - zip
+    state: latest
+  tags:
+    - setup
+    - install
+    - core
+  when:  ansible_distribution  == 'openSUSE Tumbleweed'
+
+- name: Install System Packages 3 (the rest)
+  become: true
+  zypper:
+    name:
+      - btop
+      - go
+      - lsof
+      - ccache
+      - python3-pip
+      - moreutils
+      - eza
+      - bat
+    state: latest
+  tags:
+    - setup
+    - install
+    - core
+  when:  ansible_distribution  == 'openSUSE Tumbleweed'
+
+#- name: Install Nvidia Packages
+#  become: true
+#  zypper:
+#    name:
+#      - akmod-nvidia
+#      - xorg-x11-drv-nvidia-cuda
+#      - nvidia-vaapi-driver
+#      - nvidia-settings
+#      - xorg-x11-drv-nvidia-power
+#      - vulkan
+#      - vulkan-tools
+#      - xorg-x11-drv-nvidia-cuda-libs
+#      - nvidia-vaapi-driver
+#      - libva-utils
+#      - vdpauinfo
+#  tags:
+#    - setup
+#    - install
+#    - core
+#  when:  ansible_distribution  == 'openSUSE Tumbleweed'
+
+
+- name: Install Art studio
+  become: true
+  zypper:
+    name:
+      - blender
+      - gimp
+      - inkscape
+      - scribus
+      - krita
+    state: latest
+    disable_recommends: false
+  tags:
+    - install
+    - core
+    - art
+  when:  ansible_distribution  == 'openSUSE Tumbleweed'
+
+
+- name: Install Games
+  become: true
+  zypper:
+    name:
+      - steam
+      - wesnoth
+
+
+#- name: Enable Nvidia Suspend scripts
+#  systemd:
+#    name: nvidia-suspend
+#    enabled: true
+#  become: yes
+
+#- name: enable Nvidia Resume scripts
+#  systemd:
+#    name: nvidia-resume
+#    enabled: true
+#  become: yes
+
+#- name: enable Nvidia Hibernate Scripts
+#  systemd:
+#    name: nvidia-hibernate
+#    enabled: true
+#  become: yes
+
+

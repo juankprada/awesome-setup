@@ -218,6 +218,12 @@
       - steam
       - wesnoth
       - gnome-chess
+  tags:
+    - install
+    - core
+    - art
+    - 0ad
+  when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
 
 # - name: Public KMOD key exists?
 #   stat:
@@ -250,18 +256,37 @@
     name: nvidia-suspend
     enabled: true
   become: yes
+  tags:
+    - install
+    - core
+    - art
+    - 0ad
+  when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+
 
 - name: enable Nvidia Resume scripts
   systemd:
     name: nvidia-resume
     enabled: true
   become: yes
+  tags:
+    - install
+    - core
+    - art
+    - 0ad
+  when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
 
 - name: enable Nvidia Hibernate Scripts
   systemd:
     name: nvidia-hibernate
     enabled: true
   become: yes
+  tags:
+    - install
+    - core
+    - art
+    - 0ad
+  when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
 
 - name: Fix Numphy  setup correctly on modprobe
   shell: |
@@ -286,8 +311,7 @@
   become: true
   shell: |
     echo "install_items+=/etc/modprobe.d/hid_apple.conf" >> /etc/dracut.conf.d/hid_apple.conf && dracut --force
-  when: numphy.stat.exists == False
-
+  when: ansible_distribution == 'Fedora' or ansible_distribution == 'CentOs' or  ansible_distribution  == 'RedHat' and numphy.stat.exists == False
 
 ## TODO
 ## There are things here that may be needed.

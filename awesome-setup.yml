@@ -10,15 +10,14 @@
     - import_tasks: tasks/fedora-setup.yml
     - import_tasks: tasks/ubuntu-setup.yml
     - import_tasks: tasks/debian-setup.yml
-    - import_tasks: tasks/os-commons.yml
+    - import_tasks: tasks/opensuse-tumbleweed-setup.yml
+    - import_tasks: tasks/opensuse-leap-setup.yml
   tasks:
     - import_tasks: tasks/git-setup.yml
     - import_tasks: tasks/sdkman-setup.yml
     - import_tasks: tasks/awesome-java-setup.yml
     - import_tasks: tasks/js-setup.yml
     - import_tasks: tasks/personal-projects.yml
-    # - import_tasks: tasks/debugger.yml
     - import_tasks: tasks/dotfiles.yml
     - import_tasks: tasks/flatpack.yml
-    #- import_tasks: tasks/snaps.yml
     - import_tasks: tasks/fonts.yml

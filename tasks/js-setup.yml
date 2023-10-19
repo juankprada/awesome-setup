@@ -16,6 +16,16 @@
     - node
   when: ansible_distribution == 'Ubuntu'
 
+- name: Install nodejs and npm
+  become: true
+  zypper:
+    name: ["nodejs", "npm"]
+    state: latest
+  tags:
+    - install
+    - node
+  when: ansible_distribution == 'openSUSE Tumbleweed' or ansible_distribution == 'openSUSE Leap'
+
 
 - name: npmjs prefix
   shell: mkdir -p {{ ansible_env.HOME }}/.local/.npm-global
