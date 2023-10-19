@@ -46,6 +46,20 @@
   tags:
     - setup
 
+- name: Install Development Packages
+  zypper:
+    type: pattern
+    name:
+      - devel_basis
+      - devel_C_C++
+      - devel_python3
+      - devel_ruby
+      - devel_kde_frameworks
+    state: latest
+  become: yes
+  when:  ansible_distribution  == 'openSUSE Leap'
+  tags:
+    - setup
 
 - name: Install Multimedia Codecs
   zypper:
