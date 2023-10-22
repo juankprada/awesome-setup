@@ -58,64 +58,17 @@
     - core
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
 
-
-- name: Install Xmonad and tools for my Desktop Environment
-  become: true
-  dnf:
-    name:
-      - sddm
-      - xmonad
-      - xrdb
-      - xset
-      - xsettingsd
-      - xdotool
-      - xmobar
-      - alacritty
-      - dmenu
-      - slock
-      - light
-      - nitrogen
-      - lxappearance
-      - xscreensaver
-      - xfce4-power-manager
-      - picom
-      - arandr
-      - autorandr
-      - pavucontrol
-      - volumeicon
-      - shutter
-      - dunst # notifications
-      - blueman
-      - xorg-x11-xinit-session
-      - lxappearance
-      - rofi
-      - unclutter-xfixes #unclutter
-      - jgmenu
-      - arc-theme
-      - papirus-icon-theme
-      - py3status
-      - renameutils
-  when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
-
 - name: Swapp ffmpeg packages
   become: true
   shell: |
     dnf swap ffmpeg-free ffmpeg --allowerasing
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
 
-- name: Install System Packages 2 (zsh, emacs, curl, git, lua, unzip, libtool, libtool, gettext)
+- name: Install System Packages (zsh, emacs, curl, git, lua, unzip, libtool, gettext)
   become: true
   dnf:
     name:
-      - xinput
-      - lxpolkit
-      - rxvt-unicode
-      - weechat
-      - ibus-mozc
-      - mozc
-      - mpd
-      - ncmpcpp
-      - cabal-install # for haskell
+      - trash-cli
       - emacs
       - bat
       - curl
@@ -127,7 +80,6 @@
       - jq
       - stow
       - tmux
-      - qalculate-gtk
       - flatpak
       - python3-websocket-client
     state: latest
@@ -137,23 +89,26 @@
     - core
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
 
-- name: Install System Packages 3 (the rest)
+- name: Install System Packages 2 (the rest)
   become: true
   dnf:
     name:
+      - mozc
+      - renameutils
+      - alacritty
       - btop
       - golang
       - lsof
-      - i3
       - ccache
-      - ninja-build
       - python3-pip
       - moreutils
       - rpmfusion-free-release-tainted
       - rpmfusion-nonfree-release-tainted
       - dnfdragora
-      - exa
+      - eza
       - bat
+      - kcm_wacomtablet
+      - krename
     state: latest
   tags:
     - setup
@@ -202,6 +157,33 @@
       - gimp
       - inkscape
       - scribus
+      - ImageMagick
+      - python3
+      - jq
+      - git
+      - zip
+      - coreutils
+      - wget
+      - rsync
+      - libnotify
+      - parallel
+      - optipng
+      - lftp
+      - zenity
+      - sed
+      - make
+      - python3-pip
+      - python3-unidecode
+      - python-is-python3
+      - ghostscript
+      - sshpass
+      - pango
+      - xclip
+      -  mypaint
+      - hugin
+      - peek
+      - audacity
+      - fontforge
     state: latest
   tags:
     - install
@@ -217,7 +199,6 @@
     name:
       - steam
       - wesnoth
-      - gnome-chess
   tags:
     - install
     - core
@@ -311,24 +292,15 @@
   become: true
   shell: |
     echo "install_items+=/etc/modprobe.d/hid_apple.conf" >> /etc/dracut.conf.d/hid_apple.conf && dracut --force
-  when: ansible_distribution == 'Fedora' or ansible_distribution == 'CentOs' or  ansible_distribution  == 'RedHat' and numphy.stat.exists == False
-
-## TODO
-## There are things here that may be needed.
-
-# * lxsession (polkit) - authentication agents | We may not need it as Fedora i3 may have one setup
+  when: ansible_distribution == 'Fedora' or ansible_distribution == 'CentOs' or ansible_distribution  == 'RedHat' and numphy.stat.exists == False
 
 
-
-
-# * voluemicon (pavucontrol??)
-
-# * emacs daemon
-# * clipboard manager
-# * urxvt/xterm ?
-# * music plaer cmus/mp3blaster
-# * irc client
-# * File Manger (PCManFM/Krusader/Find other/Thunar)
-# * LXAppearance
-# * Scrot for PrintScreen
-# *  WMDOCKER Window Maker docker?
+- name: Install the build dependencies for Krita
+  command:
+    dnf builddep -y krita
+  args:
+    warn: false
+  register: dnf_result
+  become: yes
+  when: ansible_pkg_mgr == 'dnf' and ansible_distribution == 'Fedora' or ansible_distribution == 'CentOs' or ansible_distribution  == 'RedHat'
+  changed_when: '"Nothing to do" not in dnf_result.stdout'
