@@ -5,7 +5,7 @@
     - setup
 
 - name: Install latest sable Temurin JDK (Eclipse)
-  shell: . {{ ansible_env.HOME }}/.sdkman/bin/sdkman-init.sh && sdk install java
+  shell: ". {{ ansible_env.HOME }}/.sdkman/bin/sdkman-init.sh && sdk install java"
   when : is_sdkman_installed2.stdout == "yes"
 
 - name: Install Apache ANT

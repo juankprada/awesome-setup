@@ -273,7 +273,7 @@
   shell: |
     grep -qxF 'options hid_apple fnmode=0' /etc/modprobe.d/hid_apple.conf || echo 'options hid_apple fnmode=0' >> /etc/modprobe.d/hid_apple.conf
   tags:
-    - install
+    - installr
     - core
   become: yes
   when:  ansible_distribution == 'Fedora' or ansible_distribution == 'CentOs' or  ansible_distribution  == 'RedHat'

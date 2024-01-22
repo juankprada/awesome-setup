@@ -1,61 +1,31 @@
 - name: Update Debian packages
   become: true
   apt:
+    update_cache: yes
     upgrade: "safe"
   when: ansible_distribution == 'Debian'
   tags:
     - setup
 
-- name: Add specified repository into sources list 1
-  ansible.builtin.apt_repository:
-    repo: deb http://deb.debian.org/debian bookworm non-free non-free-firmware
-    state: present
-  when: ansible_distribution == 'Debian'
-
-- name: Add specified repository into sources list 2
-  ansible.builtin.apt_repository:
-    repo: deb-src http://deb.debian.org/debian bookworm non-free non-free-firmware
-    state: present
-  when: ansible_distribution == 'Debian'
-
-- name: Add specified repository into sources list 3
-  ansible.builtin.apt_repository:
-    repo: deb http://deb.debian.org/debian-security bookworm-security non-free non-free-firmware
-    state: present
-  when: ansible_distribution == 'Debian'
-
-- name: Add specified repository into sources list 4
-  ansible.builtin.apt_repository:
-    repo: deb-src http://deb.debian.org/debian-security bookworm-security non-free non-free-firmware
-    state: present
-  when: ansible_distribution == 'Debian'
-
-- name: Add specified repository into sources list 5
-  ansible.builtin.apt_repository:
-    repo: deb http://deb.debian.org/debian bookworm-updates non-free non-free-firmware
-    state: present
-  when: ansible_distribution == 'Debian'
-
-- name: Add specified repository into sources list 6
-  ansible.builtin.apt_repository:
-    repo: deb-src http://deb.debian.org/debian bookworm-updates non-free non-free-firmware
-    state: present
-  when: ansible_distribution == 'Debian'
-
 - name: Update all packages to their latest version
-  ansible.builtin.apt:
+  apt:
+    update_cache: yes
     name: "*"
     state: latest
+  become: true
   when: ansible_distribution == 'Debian'
 
-- name: Install System Packages 1 (build-essential, cmake, pkg-config, pthread)
+- name: Install Build Essential tools (build-essential, cmake, pkg-config, pthread)
   become: true
   apt:
+    update_cache: yes
     name:
       - build-essential
       - cmake
       - pkg-config
       - libpthread-stubs0-dev
+      - linux-headers-amd64
+      - make
   tags:
     - setup
     - install
@@ -63,80 +33,62 @@
     - debian
   when: ansible_distribution == 'Debian'
 
-- name: Install Xmonad and tools for my Desktop Environment
+#TODO INSTALL Eza (an alternative to 'ls' command in Linux)
+#TODO Fix Numphy 75 keyboard on Debian
+#TODO Krita Build Deps
+
+- name: Install essential CLI packages
   become: true
   apt:
+    update_cache: yes
     name:
-      - sddm
-      - xmonad
-      - x11-xserver-utils
-      - xsettingsd
-      - xdotool
-      - libx11
-      - libxft
-      - libxinerama
-      - libxrandr
-      - libxss
-      - alacritty
-      - dmenu
-      - slock
-      - light
-      - nitrogen
-      - xscreensaver
-      - xfce4-power-manager
-      - picom
-      - arandr
-      - autorandr
-      - pavucontrol
-      - volumeicon
-      - shutter
-      - dunst
-      - blueman
-      - rofi
-      - unclutter
-      - jgmenu
-      - arc-theme
-      - papirus-icon-theme
-  when: ansible_distribution == 'Debian'
-
-
-- name: Install System Packages 3 (command line tools)
-  become: true
-  apt:
-    name:
-      - emacs
+      - imagemagick
+      - optipng
+      - trash-cli
+      - bat
       - curl
       - git
-      - lua5.4
-      - unzip
-      - libtool
       - gettext
       - jq
       - stow
       - tmux
-      - flatpak
-  tags:
-    - setup
-    - install
-    - core
-    - debian
-  when: ansible_distribution == 'Debian'
+      - btop
+      - lsof
+      - moreutils
+      - renameutils
+      - gpg
+      - zip
+      - coreutils
+      - wget
+      - rsync
+      - parallel
+      - xclip
+      - sed
+      - sshpass
+      - unzip
+      - ghostscript
+      - lftp
 
-
-- name: Install System Packages 4 (Extra tools not used that often but necessary for my setup)
+- name: Install System Packages usually needed in any modern Debian setup
   become: true
   apt:
     name:
-      - btop
-      - golang
-      - lsof
+      - synaptic
+      - libtool
       - i3
       - ccache
-      - ninja-build
-      - pip
       - nvidia-settings
       - pavucontrol
-      - moreutils
+      - fcitx5-mozc
+      - alacritty
+      - libnotify4
+      - zenity
+      - icc-profiles
+      - nvidia-detect
+      - vlc
+      - flatpak
+      - snapd
+    update_cache: yes
   tags:
     - setup
     - install
@@ -144,9 +96,48 @@
     - debian
   when: ansible_distribution == 'Debian'
 
+
+- name: Install my custom Desktop Environment
+  become: true
+  apt:
+    update_cache: yes
+    name:
+      -
+      
+
+- name: Install Extra KDE packages
+  become: true
+  apt:
+    update_cache: yes
+    name:
+      - kde-config-tablet
+      - krename
+  tags:
+    - kde
+      
+- name: Install Python tools
+  become: true
+  apt:
+    update_cache: yes
+    name:
+      - python3
+      - pip
+      - python3-pip
+      - python3-websocket
+      - python3-unidecode
+      - python-is-python3
+
+- name: Install Ruby tools
+  beome: true
+  apt:
+    update_cache: yes
+    name:
+      - rbenv
+      
 - name: Install Clang
   become: true
   apt:
+    update_cache: yes
     name:
       - clang
       - clang-13
@@ -163,18 +154,72 @@
     - install
     - core
     - debian
-  when: ansible_distribution == 'Debian'
+
 
 - name: Install my Art Studio
   become: true
   apt:
+    update_cache: yes
     name:
-      - blender
       - gimp
-      - inkscape
-      - scribus
+      - hugin
+      - peek
+      - audacity
+      - fontforge
+      - fontforge-extras
   tags:
     - install
     - core
     - debian
+
+
+
+- name: Create 'Applications' directory if it doesn't exist
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/Applications"
+    state: directory
+    mode: '0755'
+  when: ansible_distribution == 'Debian'
+
+
+- name: Install Scribus AppImage
+  become: false
+  get_url:
+    url: https://sourceforge.net/projects/scribus/files/scribus/1.6.1/scribus-1.6.1-linux-x86_64.AppImage/download
+    dest: "{{ ansible_env.HOME }}/Applications/"
+  when: ansible_distribution == 'Debian'
+
+- name: Install Nvidia drivers
+  become: true
+  apt:
+    update_cache: yes
+    name:
+      - nvidia-driver
+      - firmware-misc-nonfree
+      - nvidia-cuda-dev
+      - nvidia-cuda-toolkit
+      - libnvoptix1
+  when: ansible_distribution == 'Debian'
+
+- name: Enable 32-bit multiarch for Steam games
+  become: true
+  shell: dpkg --add-architecture i386 && sudo apt update
+  when: ansible_distribution == 'Debian'
+
+
+- name: install 32-bit nvidia libraries
+  become: true
+  apt:
+    update_cache: yes
+    name: nvidia-driver-libs:i386
+  when: ansible_distribution == 'Debian'
+
+  
+- name: Fix NuPhy Air 75 on Debian
+  shell: |
+    grep -qxF 'options hid_apple fnmode=0' /etc/modprobe.d/hid_apple.conf || echo 'options hid_apple fnmode=0' >> /etc/modprobe.d/hid_apple.conf
+  tags:
+    - installr
+    - core
+  become: true
   when: ansible_distribution == 'Debian'
