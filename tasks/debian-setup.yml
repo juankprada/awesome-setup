@@ -6,6 +6,7 @@
   when: ansible_distribution == 'Debian'
   tags:
     - setup
+    - update
 
 - name: Update all packages to their latest version
   apt:
@@ -14,6 +15,8 @@
     state: latest
   become: true
   when: ansible_distribution == 'Debian'
+  tags:
+    - update
 
 - name: Install Build Essential tools (build-essential, cmake, pkg-config, pthread)
   become: true
@@ -68,6 +71,10 @@
       - unzip
       - ghostscript
       - lftp
+      - xq
+      - yq
+      - ripgrep
+      - fd-find
 
 - name: Install System Packages usually needed in any modern Debian setup
   become: true
@@ -82,12 +89,12 @@
       - fcitx5-mozc
       - alacritty
       - libnotify4
-      - zenity
       - icc-profiles
       - nvidia-detect
-      - vlc
       - flatpak
       - snapd
+      - vlc
+      
     update_cache: yes
   tags:
     - setup
@@ -102,8 +109,74 @@
   apt:
     update_cache: yes
     name:
-      -
+      - xmonad
+      - x11-xserver-utils
+      - xsettingsd
+      - xdotool
+      - x11-utils
+      - libx11-6
+      - libxft2
+      - libxinerama1
+      - libxrandr2
+      - libxss1
+      - suckless-tools
+      - light
+      - nitrogen
+      - picom
+      - arandr 
+      - autorandr
+      - kanshi # autorandr for wayland
+      - pasystray
+      - pavucontrol
+      - shutter
+      - dunst
+      - blueman
+      - rofi
+      - unclutter
+      - jgmenu
+      - arc-theme
+      - papirus-icon-theme
+      - isync # for email configuration
+      - notmuch # for email tagging and indexxing
+      - notmuch-addrlookup
+      - xfce4-power-manager #TODO: May be worth to check for something else
+      - xfce4-power-manager-plugins
+      - xfce4-power-manager-data
+      - trayer #TODO: Find an alternative?
+      - zenity #NOTE: Used to get "root password" prompts in UI
+      - xsecurelock #NOTE: alternative to xscreensaver
+      - xss-lock # Used to launch xsecurelock
+      - udiskie # Used to automount external disk (Perfect for backup)
+      - sddm
+      - sddm-theme-debian-breeze
+      - usbguard # For protection
+      - usbguard-notifier # Notification for Usbguard, duh
+      - caffeine # Prevent the system to lock screen when Full Screen windows are active
+      - playerctl # For controlling media players using MPRIS D-Bus
+      - ddcutil # Control external monitor brightness from CMD
+      ## FIXME We need to find a good Login Manager for Xmonad
+  tags:
+    - xmonad
       
+- name: Install extra Apps used on Window Managers
+  become: true
+  apt:
+    update_cache: yes
+    name:
+      - xinput
+      - xinput-calibrator
+      - lxpolkit
+      - rxvt-unicode
+      - mpd
+      - mpc
+      - mpdris2
+      - mpv
+      - mpv-mpris
+      - ncmpcpp
+      - cabal-install # for Haskell
+      - qalculate-gtk
+      - network-manager-gnome
+      - nm-tray # Check this out instead of network-manager-gnome
 
 - name: Install Extra KDE packages
   become: true
@@ -126,9 +199,10 @@
       - python3-websocket
       - python3-unidecode
       - python-is-python3
+      - python3-notify2
 
 - name: Install Ruby tools
-  beome: true
+  become: true
   apt:
     update_cache: yes
     name:
@@ -219,7 +293,7 @@
   shell: |
     grep -qxF 'options hid_apple fnmode=0' /etc/modprobe.d/hid_apple.conf || echo 'options hid_apple fnmode=0' >> /etc/modprobe.d/hid_apple.conf
   tags:
-    - installr
+    - install
     - core
   become: true
   when: ansible_distribution == 'Debian'

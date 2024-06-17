@@ -12,5 +12,5 @@ ansible-playbook ssh-setup-playbook.yml --ask-vault-pass
 eval $(ssh-agent -s)
 ssh-add ~/.ssh/id_ed25519
 
-ansible-playbook awesome-setup.yml
+ansible-playbook awesome-setup.yml --skip-tags "update"
 #--ask-become-pass
