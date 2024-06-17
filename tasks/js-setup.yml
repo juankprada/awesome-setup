@@ -14,7 +14,8 @@
   tags:
     - install
     - node
-  when: ansible_distribution == 'Ubuntu'
+  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+
 
 - name: Install nodejs and npm
   become: true
@@ -40,13 +41,13 @@
   - node
 
 - name: npmjs global settings
-  shell: npm config set prefix '{{ ansible_env.HOME }}/.local/.npm-global'
+  shell: "npm config set prefix '{{ ansible_env.HOME }}/.local/.npm-global'"
   tags:
   - install
   - node
 
 - name: npmjs global settings export path in case I don't have dotfiles installed
-  shell: export PATH={{ ansible_env.HOME }}/.local/.npm-global/bin:$PATH
+  shell: "export PATH={{ ansible_env.HOME }}/.local/.npm-global/bin:$PATH"
   tags:
   - install
   - node

@@ -7,7 +7,7 @@
 - name: Install Starship shell promtp
   become: true
   expect:
-    command: curl -sS https://starship.rs/install.sh | sh
+    command: "curl -sS https://starship.rs/install.sh | sh"
     responses:
       Question:
         - 'y'

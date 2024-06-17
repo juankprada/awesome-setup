@@ -1,5 +1,14 @@
-- name: Install Visuals Studio Code
+
+- name: Install Snaps (Things not found in Flatpak)
   community.general.snap:
-    name: code
+    name:
+     - core
+     - snap-store
+     - code
+     - blender
+     - krita
+     - inkscape
+     - converseen
     classic: true
   become: true
+
