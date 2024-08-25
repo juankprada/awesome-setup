@@ -4,134 +4,75 @@
     upgrade: "safe"
   when: ansible_distribution == 'Ubuntu'
   tags:
-    - setup
-
-- name: Install System Packages 1 (build-essential, cmake, pkg-config, pthread)
-  become: true
-  apt:
-    name:
-      - build-essential
-      - cmake
-      - pkg-config
-      - libpthread-stubs0-dev
-  tags:
-    - setup
-    - install
-    - core
+    - pkg
     - ubuntu
-  when: ansible_distribution == 'Ubuntu'
 
-- name: Install Xmonad and tools for my Desktop Environment
-  become: true
-  apt:
-    name:
-      - sddm
-      - xmonad
-      - x11-xserver-utils
-      - xsettingsd
-      - xdotool
-      - libx11
-      - libxft
-      - libxinerama
-      - libxrandr
-      - libxss
-      - alacritty
-      - dmenu
-      - slock
-      - light
-      - nitrogen
-      - xscreensaver
-      - xfce4-power-manager
-      - picom
-      - arandr
-      - autorandr
-      - pavucontrol
-      - volumeicon
-      - shutter
-      - dunst
-      - blueman
-      - rofi
-      - unclutter
-      - jgmenu
-      - arc-theme
-      - papirus-icon-theme
-  when: ansible_distribution == 'Ubuntu'
+- name: Install dependencies
+  block:
+  - name: Install build essentials
+    become: true                          
+    apt:                                  
+      name:                               
+        - build-essential                 
+        - cmake                           
+        - pkg-config                      
+        - libpthread-stubs0-dev
+        - autoconf                
+        - bison                   
+        - clang                   
+        - rustc                   
+        - libssl-dev              
+        - libreadline-dev         
+        - zlib1g-dev              
+        - libyaml-dev             
+        - libreadline-dev         
+        - libncurses5-dev         
+        - libffi-dev              
+        - libgdbm-dev             
+        - libjemalloc2            
+        - libvips                 
+        - imagemagick             
+        - libmagickwand-dev       
+        - mupdf                   
+        - mupdf-tools             
+        - gir1.2-gtop-2.0         
+        - gir1.2-clutter-1.0      
+        - redis-tools             
+        - sqlite3                 
+        - libsqlite3-0            
+        - libmysqlclient-dev      
+        - libpq-dev               
+        - postgresql-client       
+        - postgresql-client-common
+    when: ansible_distribution == 'Ubuntu'
+    tags:                                 
+      - pkg
+      - ubuntu                            
 
-- name: Install System Packages 3 (command line tools)
-  become: true
-  apt:
-    name:
-      - emacs
-      - curl
-      - git
-      - lua5.4
-      - unzip
-      - libtool
-      - gettext
-      - jq
-      - stow
-      - tmux
-      - flatpak
-  tags:
-    - setup
-    - install
-    - core
-    - ubuntu
-  when: ansible_distribution == 'Ubuntu'
-
-
-- name: Install System Packages 4 (Extra tools not used that often but necessary for my setup)
-  become: true
-  apt:
-    name:
-      - btop
-      - golang
-      - lsof
-      - i3
-      - ccache
-      - ninja-build
-      - pip
-      - nvidia-settings
-      - pavucontrol
-      - moreutils
-  tags:
-    - setup
-    - install
-    - core
-    - ubuntu
-  when: ansible_distribution == 'Ubuntu'
-
-- name: Install Clang
-  become: true
-  apt:
-    name:
-      - clang
-      - clang-13
-      - clang-14
-      - clang-15
-      - clang-16
-      - clangd
-      - clangd-13
-      - clangd-14
-      - clangd-15
-      - clangd-16
-  tags:
-    - setup
-    - install
-    - core
-    - ubuntu
-  when: ansible_distribution == 'Ubuntu'
-
-- name: Install my Art Studio
-  become: true
-  apt:
-    name:
-      - blender
-      - gimp
-      - inkscape
-      - scribus
-  tags:
-    - install
-    - core
-    - ubuntu
-  when: ansible_distribution == 'Ubuntu'
+  - name: Core terminal tools
+    become: true
+    apt:                                  
+      name:                               
+        - fzf
+        - ripgrep
+        - bat
+        - eza
+        - zoxide
+        - plocate
+        - btop
+        - fd-find
+        - tldr
+        - curl                            
+        - git                             
+        - unzip                           
+        - libtool                         
+        - gettext                         
+        - jq                              
+        - stow                            
+        - tmux
+        - lsof
+        - moreutils
+    tags:                                 
+      - pkg
+      - ubuntu                            
+    when: ansible_distribution == 'Ubuntu'

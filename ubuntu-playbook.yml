@@ -1,0 +1,187 @@
+---
+- name: Ubuntu Dev environment setup
+  hosts: localhost
+  connection: local
+  vars:
+    ansible_become_password: '{{ lookup("env", "ANSIBLE_BECOME_PASSWORD") }}'
+  vars_files:
+    - ./vars.yml
+  tasks:
+
+    ## TODO: Move this to a reusable task  
+    - name: Disable Suspension and Lock while updating
+      block:
+      - name: Register original Lock Enabled value
+        community.general.dconf:
+          key: "/org/gnome/desktop/screensaver/lock-enabled"
+          state: read
+        register: orig_gnome_lock_enabled
+        when: running_gnome == 'true'
+      - name: Register original Idle Delay value
+        community.general.dconf:
+          key: "/org/gnome/desktop/session/idle-delay"
+          state: read
+        register: orig_gnome_idle_delay
+        when: running_gnome == 'true'
+
+      - name: Set Lock to Disabled
+        community.general.dconf:
+          key: "/org/gnome/desktop/screensaver/lock-enabled"
+          value: false
+          state: present
+        when: running_gnome == 'true'
+
+      - name: Set Idle Delay to 0
+        community.general.dconf:
+          key: "/org/gnome/desktop/session/idle-delay"
+          value: 0
+          state: present
+        when: running_gnome == 'true'
+
+        
+    - name: Update Ubuntu packages
+      become: true
+      apt:
+        upgrade: "safe"
+      when: ansible_distribution == 'Ubuntu'
+      tags:
+        - pkg
+        - ubuntu
+
+       
+    - name: Install dependencies
+      block:
+      - name: Install build essentials
+        become: true                          
+        apt:                                  
+          name:                               
+            - build-essential                 
+            - cmake                           
+            - pkg-config                      
+            - libpthread-stubs0-dev
+            - autoconf
+            - gpg
+            - wget
+            - bison                   
+            - clang                   
+            - rustc                   
+            - libssl-dev              
+            - libreadline-dev         
+            - zlib1g-dev              
+            - libyaml-dev             
+            - libreadline-dev         
+            - libncurses5-dev         
+            - libffi-dev              
+            - libgdbm-dev             
+            - libjemalloc2            
+            - libvips                 
+            - imagemagick             
+            - libmagickwand-dev       
+            - mupdf                   
+            - mupdf-tools             
+            - gir1.2-gtop-2.0         
+            - gir1.2-clutter-1.0      
+            - redis-tools             
+            - sqlite3                 
+            - libsqlite3-0            
+            - libmysqlclient-dev      
+            - libpq-dev               
+            - postgresql-client       
+            - postgresql-client-common
+        when: ansible_distribution == 'Ubuntu'
+        tags:                                 
+          - pkg
+          - ubuntu                            
+       
+      - name: Core terminal tools
+        become: true
+        apt:                                  
+          name:                               
+            - fzf
+            - ripgrep
+            - bat
+            - eza
+            - zoxide
+            - plocate
+            - btop
+            - fd-find
+            - tldr
+            - curl                            
+            - git                             
+            - unzip                           
+            - libtool                         
+            - gettext                         
+            - jq                              
+            - stow                            
+            - tmux
+            - lsof
+            - moreutils
+            - alacritty
+        tags:                                 
+          - pkg
+          - ubuntu                            
+        when: ansible_distribution == 'Ubuntu'
+
+
+    - name: Installing Java Development Enviornment
+      include_role:
+        name: Comcast.sdkman
+      vars:
+        sdkman_install_packages:  
+          - { candidate: java, version: 22.0.2-tem }
+          - { candidate: java, version: 22.0.2-graalce }
+          - { candidate: quarkus }
+          - { candidate: ant }    
+          - { candidate: maven }  
+          - { candidate: gradle } 
+          - { candidate: jbang }  
+          - { candidate: jbake }  
+        sdkman_defaults:          
+          java: 22.0.2-tem         
+        sdkman_update_alternatives:
+          - candidate: java       
+            name: java            
+            link: /usr/bin/java   
+          - candidate: java       
+            name: javac           
+            link: /usr/bin/javac
+      when: install_java_env == true
+
+
+    ## TODO: Move this to a reusable task
+    - name: Install Mise
+      block:
+      - name: Create /etc/apt/keyrings directory
+        file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
+        become: yes
+      - name: Download mise gpg keys
+        ansible.builtin.get_url:
+        url: https://mise.jdx.dev/gpg-key.pub
+        dest: /etc/apt/keyrings/mise.asc
+      
+    
+
+
+
+    ## TODO: Move this to a reusable task
+    - name: Restore Lock and idle Delay
+      block:
+      - name: Register original Lock Enabled value
+        community.general.dconf:
+          key: "/org/gnome/desktop/screensaver/lock-enabled"
+          value: "{{ orig_gnome_lock_enabled['value'] }}"
+          state: present
+        register: 
+        when: running_gnome == 'true'
+      
+      - name: Register original Idle Delay value
+        community.general.dconf:
+          key: "/org/gnome/desktop/session/idle-delay"
+          value: "{{ orig_gnome_idle_delay['value'] }}"
+          state: present
+        register: 
+        when: running_gnome == 'true'
+      

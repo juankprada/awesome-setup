@@ -1,0 +1,62 @@
+```yaml
+- name: Create /etc/apt/keyrings directory
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+```
+
+**2. Install GPG key**
+
+```yaml
+- name: Download and install GPG key
+  get_url:
+    url: https://mise.jdx.dev/gpg-key.pub
+    dest: /tmp/mise-gpg-key.pub
+  notify: update apt cache
+
+- name: Import GPG key
+  shell:
+    cmd: gpg --dearmor < /tmp/mise-gpg-key.pub | sudo tee /etc/apt/keyrings/mise-archive-keyring.gpg > /dev/null
+```
+
+**3. Add repository**
+
+```yaml
+- name: Add MISE repository to sources.list.d
+  template:
+    src: templates/mise.list.j2
+    dest: /etc/apt/sources.list.d/mise.list
+    mode: '0644'
+  notify: update apt cache
+
+- name: Make sure the file is owned by root and the permissions are correct
+  file:
+    path: /etc/apt/sources.list.d/mise.list
+    state: touch
+    owner: root
+    group: root
+    mode: '0644'
+```
+
+**templates/mise.list.j2**
+```jinja2
+deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.gpg arch=amd64] https://mise.jdx.dev/deb stable main
+```
+
+**4. Update apt cache**
+
+```yaml
+- name: Update apt cache
+  apt:
+    update_cache: yes
+```
+
+**5. Install MISE package**
+
+```yaml
+- name: Install MISE package
+  apt:
+    name: mise
+    state: present
+```

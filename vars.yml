@@ -1,5 +1,22 @@
 ---
 # Set all variables needed by the playbooks here
+
+# Initial selection
+install_java_env: "{{ lookup('env', 'INSTALL_JAVA_ENV') }}"
+install_ruby_env: "{{ lookup('env', 'INSTALL_RUBY_ENV') }}"
+install_nodejs_env: "{{ lookup('env', 'INSTALL_NODEJS_ENV') }}"
+install_go_env: "{{ lookup('env', 'INSTALL_GO_ENV') }}"
+install_php_env: "{{ lookup('env', 'INSTALL_PHP_ENV') }}"
+install_python_env: "{{ lookup('env', 'INSTALL_PYTHON_ENV') }}"
+install_elixir_env: "{{ lookup('env', 'INSTALL_ELIXIR_ENV') }}"
+install_rust_env: "{{ lookup('env', 'INSTALL_RUST_ENV') }}"
+install_flutter_env: "{{ lookup('env', 'INSTALL_FLUTTER_ENV') }}"
+
+install_recommended_apps: "{{ lookup('env', 'INSTALL_RECOMMENDED_APPS') }}"
+install_nerd_fonts: "{{ lookup('env', 'INSTALL_NERD_FONTS') }}"
+
+running_gnome: "{{ lookup('env', 'RUNNING_GNOME') }}"
+
 ssh_key_name: "id_ed25519"
 source_key: "./.ssh/{{ ssh_key_name }}"
 dest_key: "{{ lookup('env', 'HOME') }}/.ssh/{{ ssh_key_name }}"
