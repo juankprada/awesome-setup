@@ -1,7 +1,7 @@
 ---
 # Set all variables needed by the playbooks here
 
-# Initial selection
+# Programming Languages selection
 install_java_env: "{{ lookup('env', 'INSTALL_JAVA_ENV') }}"
 install_ruby_env: "{{ lookup('env', 'INSTALL_RUBY_ENV') }}"
 install_nodejs_env: "{{ lookup('env', 'INSTALL_NODEJS_ENV') }}"
@@ -12,8 +12,11 @@ install_elixir_env: "{{ lookup('env', 'INSTALL_ELIXIR_ENV') }}"
 install_rust_env: "{{ lookup('env', 'INSTALL_RUST_ENV') }}"
 install_flutter_env: "{{ lookup('env', 'INSTALL_FLUTTER_ENV') }}"
 
+
+# Recommended Apps selection
 install_recommended_apps: "{{ lookup('env', 'INSTALL_RECOMMENDED_APPS') }}"
 install_nerd_fonts: "{{ lookup('env', 'INSTALL_NERD_FONTS') }}"
+
 
 running_gnome: "{{ lookup('env', 'RUNNING_GNOME') }}"
 

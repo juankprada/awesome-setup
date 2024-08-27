@@ -89,7 +89,12 @@ ansible-galaxy collection install community.general
 # Default Selections
 export INSTALL_JAVA_ENV=true
 export INSTALL_RUBY_ENV=true
-
+export INSTALL_NODEJS_ENV=true
+export INSTALL_GO_ENV=true
+export INSTALL_PYTHON_ENV=true
+export INSTALL_ELIXIR_ENV=ture
+export INSTALL_RUST_ENV=true
+export INSTALL_FLUTTER_ENV=true
 
 # ask for sudo pass
 
