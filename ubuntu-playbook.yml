@@ -6,39 +6,12 @@
     ansible_become_password: '{{ lookup("env", "ANSIBLE_BECOME_PASSWORD") }}'
   vars_files:
     - ./vars.yml
+  
   tasks:
+    - name: Set initial settings in Gnome Desktop
+      import_tasks: tasks/gnome-pre-task.yml
+      when: running_gnome == 'true'
 
-    ## TODO: Move this to a reusable task  
-    - name: Disable Suspension and Lock while updating
-      block:
-      - name: Register original Lock Enabled value
-        community.general.dconf:
-          key: "/org/gnome/desktop/screensaver/lock-enabled"
-          state: read
-        register: orig_gnome_lock_enabled
-        when: running_gnome == 'true'
-      - name: Register original Idle Delay value
-        community.general.dconf:
-          key: "/org/gnome/desktop/session/idle-delay"
-          state: read
-        register: orig_gnome_idle_delay
-        when: running_gnome == 'true'
-
-      - name: Set Lock to Disabled
-        community.general.dconf:
-          key: "/org/gnome/desktop/screensaver/lock-enabled"
-          value: false
-          state: present
-        when: running_gnome == 'true'
-
-      - name: Set Idle Delay to 0
-        community.general.dconf:
-          key: "/org/gnome/desktop/session/idle-delay"
-          value: 0
-          state: present
-        when: running_gnome == 'true'
-
-        
     - name: Update Ubuntu packages
       become: true
       apt:
@@ -63,8 +36,6 @@
             - gpg
             - wget
             - bison                   
-            - clang                   
-            - rustc                   
             - libssl-dev              
             - libreadline-dev         
             - zlib1g-dev              
@@ -96,7 +67,8 @@
       - name: Core terminal tools
         become: true
         apt:                                  
-          name:                               
+          name:
+            - trash-cli
             - fzf
             - ripgrep
             - bat
@@ -117,154 +89,61 @@
             - lsof
             - moreutils
             - alacritty
+            - renameutils
+            - coreutils
+            - rsync
+            - zenity
+            - optipng
+            - sed
+            - awk
+            - make
+            - sshpass
+            - pango1.0-tools
+            - xclip
         tags:                                 
           - pkg
           - ubuntu                            
         when: ansible_distribution == 'Ubuntu'
 
-
-    - name: Installing Java Development Enviornment
-      include_role:
-        name: Comcast.sdkman
-      vars:
-        sdkman_install_packages:  
-          - { candidate: java, version: 22.0.2-tem }
-          - { candidate: java, version: 22.0.2-graalce }
-          - { candidate: quarkus }
-          - { candidate: ant }    
-          - { candidate: maven }  
-          - { candidate: gradle } 
-          - { candidate: jbang }  
-          - { candidate: jbake }  
-        sdkman_defaults:          
-          java: 22.0.2-tem         
-        sdkman_update_alternatives:
-          - candidate: java       
-            name: java            
-            link: /usr/bin/java   
-          - candidate: java       
-            name: javac           
-            link: /usr/bin/javac
-      when: install_java_env == 'true'
-
-
-    ## TODO: Move this to a reusable task
-    - name: Install Mise
-      become: yes
-      block:
-      - name: Create /etc/apt/keyrings directory
-        file: 
-          path: /etc/apt/keyrings
-          state: directory
-          mode: '0755'
-        
-      - name: Download mise gpg keys
-        ansible.builtin.get_url:
-          url: https://mise.jdx.dev/gpg-key.pub
-          dest: /tmp/mise-gpg-key.pub
-        notify: update apt cache
-        
-      - name: Import GPG Key
-        shell:
-          cmd: gpg --dearmor < /tmp/mise-gpg-key.pub | sudo tee /etc/apt/keyrings/mise-archive-keyring.gpg > /dev/null
-        
-      - name: Add MISE repository to sources.list.d
-        template:
-          src: templates/mise.list.j2
-          dest: /etc/apt/sources.list.d/mise.list
-          mode: '0644'
-        notify: update apt cache
-        
-      - name: Make sure the file is owned by root and permissions are correct
-        file:
-          path: /etc/apt/sources.list.d/mise.list
-          state: touch
-          owner: root
-          group: root
-          mode: '0644'
-        
-      - name: update apt cache
-        apt:
-          update_cache: yes
-        
-      - name: Install MISE package
-        apt:
-          name: mise
-          state: present
-
-
-    - name: Install Ruby Development environment
-      become: no
-      block:
-      - name: Install Ruby Language - Latest version
-        shell:
-          cmd: mise use --global ruby@latest
-      - name: Installing Ruby on Rails
-        shell:
-          cmd: mise x ruby -- gem install rails --no-document
-      when: install_ruby_env == 'true'
-
-
-    - name: Install Node.js development environment
-      become: no
+    - name: Install Nvidia drivers
+      become: true
       shell:
-        cmd: mise use --global node@latest
-      when: install_nodejs_env == 'true'
+        cmd: ubuntu-drivers install
 
+    - name: Installing extra video tools
+      become: true
+      apt:
+       name:
+       - nvidia-vaapi-driver
+       - vdpauinfo
 
-    - name: Install Go development environment
-      become: no
-      shell:
-        cmd: mise use --global go@latest
-      when: install_nodejs_env == 'true'
+    - name: Install Recommended Apps
+      become: true
+      apt:
+        name:
+        - mypaint
+        - hugin
+        - peek
+        - audacity
+        - fontforge
+        - fontforge-common
+        - fontforge-extras
+        - vulkan-tools
+        - flatpak
+        - gimp
 
-    - name: Install Python dev environment
-      become: no
-      block:
-      - name: Install latest python version
-        shell:
-          cmd: mise use --global python@latest
-      - name: Install Pip
-        shell:
-          cmd: python -m ensurepip --upgrade
-      - name: Installing Pipenv
-        shell:
-          cmd: pip3 install --user pipenv
-      when: install_python_env == 'true'
+    - import_tasks: tasks/bash.yml
 
-    - name: install Elixir development environment
-      become: no
-      block:
-      - name: Install Erlang
-        shell:
-          cmd: mise use --global erlang@latest
-      - name: Install Elixir
-        shell:
-          cmd: mise use --global elixir@latest && mise x elixir -- mix local.hex --force
+    - import_tasks: tasks/java-environment.yml
 
-      
-    ## TODO: Move this to a reusable task
-    - name: Restore Lock and idle Delay
-      block:
-      - name: Register original Lock Enabled value
-        community.general.dconf:
-          key: "/org/gnome/desktop/screensaver/lock-enabled"
-          value: "{{ orig_gnome_lock_enabled['value'] }}"
-          state: present
-        register: 
-        when: running_gnome == 'true'
-      
-      - name: Register original Idle Delay value
-        community.general.dconf:
-          key: "/org/gnome/desktop/session/idle-delay"
-          value: "{{ orig_gnome_idle_delay['value'] }}"
-          state: present
-        register: 
-        when: running_gnome == 'true'
-      
+    - import_tasks: tasks/programming-environments.yml
+    
+    - import_tasks: tasks/flatpack.yml
 
+    - import_tasks: tasks/gnome-post-tasks.yml
+        
   handlers:
     - name: update apt cache
       apt:
         update_cache: yes
-        
+      become: yes          
