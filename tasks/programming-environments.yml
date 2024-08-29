@@ -46,16 +46,19 @@
 - name: Install Mise in Fedora
   become: yes
   block:                                                                            
+
   - name: Install DNF plugins core
     dnf:
       name:
         - dnf-plugins-core
       state: latest
+
   - name: Add Mise repository for DNF                                     
     template:                                                                       
-      src: templates/mise.repo.j2                                                   
+      src: templates/mise.repo.j2                                                    
       dest: /etc/yum.repos.d/mise.repo                                       
       mode: '0644'                                                                  
+
   - name: Enable Mise Repo
     community.general.dnf_config_manager:
     name: mise
