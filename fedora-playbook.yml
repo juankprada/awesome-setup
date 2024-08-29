@@ -92,7 +92,7 @@
           - mysql-libs
           - libpq-devel
           - libpq
-          - pqcli
+          - pgcli
           - bat
           - curl
           - git
