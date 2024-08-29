@@ -86,7 +86,7 @@
           - trash-cli
           - fzf
           - ripgrep
-          - imagemagick
+          - ImageMagick
           - mupdf
           - sqlite
           - mysql-libs
