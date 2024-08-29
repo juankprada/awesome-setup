@@ -13,7 +13,7 @@ check_gum() {
     fi
 }
 
-install_gum_macos() {
+install_dependencies_macos() {
     if ! command -v brew >/dev/null 2>&1; then
 	echo "Hombre is not installed. Installing Homebrew first..."
 	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -23,13 +23,15 @@ install_gum_macos() {
 
 
 # Function to install Ruby on Ubuntu using apt-get
-install_gum_ubuntu() {
-    sudo apt-get update > /dev/null
-    sudo apt-get install -y gum >/dev/null
-    
+install_dependencies_ubuntu() {
+    sudo apt update > /dev/null
+    sudo apt install -y gum >/dev/null
+    sudo apt install -y software-properties-common >/dev/null
+    sudo add-apt-repository --yes --update ppa:ansible/ansible >/dev/null 
+    sudo apt install ansible -y >/dev/null
 }
 
-install_gum_fedora() {
+install_dependencies_fedora() {
     echo '[charm]
 name=Charm
 baseurl=https://repo.charm.sh/yum/
@@ -39,6 +41,8 @@ gpgkey=https://repo.charm.sh/yum/gpg.key' | sudo tee /etc/yum.repos.d/charm.repo
     sudo rpm --import https://repo.charm.sh/yum/gpg.key
     
     sudo dnf install -y gum >/dev/null
+
+    sudo dnf install -y ansible >/dev/null
 }
 
 
@@ -51,7 +55,7 @@ detect_linux_de() {
 OS=$(uname)
 if [ "$OS" = "Darwin" ]; then
     OS="Mac"
-    install_gum_macos
+    install_dependencies_macos
 elif [ "$OS" = "Linux" ]; then
     detect_linux_de
     if [ -f /etc/os-release ]; then
@@ -59,11 +63,11 @@ elif [ "$OS" = "Linux" ]; then
 	case "$ID" in
 	    ubuntu)
 		OS="Ubuntu"
-		install_gum_ubuntu
+		install_dependencies_ubuntu
 	    ;;
 	    fedora)
 		OS="Fedora"
-		install_gum_fedora
+		install_dependencies_fedora
 	    ;;
 	    *)
 		echo "Unsupported distribution"
