@@ -27,7 +27,14 @@
       - name: Install build essentials
         become: true                          
         apt:                                  
-          name:                               
+          name:
+          - patch 
+          - rustc
+          - libreadline6-dev 
+          - libgmp-dev
+          - libgdbm6
+          - libdb-dev
+          - uuid-dev
           - autoconf                        
           - bison                           
           - cmake                           
@@ -123,6 +130,8 @@
     - import_tasks: tasks/bash.yml
 
     - import_tasks: tasks/java-environment.yml
+
+    - import_tasks: tasks/ruby-environment.yml
 
     - import_tasks: tasks/programming-environments.yml
     

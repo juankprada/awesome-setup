@@ -61,7 +61,20 @@
           - '@Development Libraries'                                                                                      
           - '@Sound and Video'                                                                                            
           - '@Multimedia'                                                                                                 
-          - gtk2-devel                                                                                                    
+          - gtk2-devel
+          - autoconf
+          - gcc
+          - rust
+          - patch
+          - make
+          - bzip2
+          - openssl-devel
+          - libyaml-devel
+          - libffi-devel
+          - readline-devel
+          - zlib-devel
+          - gdbm-devel
+          - ncurses-devel
         state: latest                                                                                                     
         allowerasing: true                                                                                                
       tags:                                                                                                               
@@ -131,6 +144,7 @@
           - parallel
           - lftp
           - ghostscript
+          - openssl
         state: latest
       tags:
         - setup
@@ -187,6 +201,8 @@
     - import_tasks: tasks/bash.yml
 
     - import_tasks: tasks/java-environment.yml
+
+    - import_tasks: tasks/ruby-environment.yml
 
     - import_tasks: tasks/programming-environments.yml
     
