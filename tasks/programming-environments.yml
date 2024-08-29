@@ -58,13 +58,7 @@
       src: templates/mise.repo.j2                                                    
       dest: /etc/yum.repos.d/mise.repo                                       
       mode: '0644'                                                                  
-
-  - name: Enable Mise Repo
-    community.general.dnf_config_manager:
-      name: mise
-      state: enabled
   
-
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
 
 
