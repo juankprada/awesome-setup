@@ -44,20 +44,24 @@
 
 
 - name: Install Mise in Fedora
-  become: yes                                                                       
+  become: yes
   block:                                                                            
   - name: Install DNF plugins core
-    become: yes
     dnf:
       name:
-      - dnf-plugins-core
-    state: latest
-  - name: Enable Mise repo
-    dnf:
-      name: "https://mise.jdx.dev/rpm/mise.repo"
-      state: present
-      disable_gpg_check: True
-    become: yes
+        - dnf-plugins-core
+      state: latest
+  - name: Add Mise repository for DNF                                     
+    template:                                                                       
+      src: templates/mise.repo.j2                                                   
+      dest: /etc/yum.repos.d/mise.repo                                       
+      mode: '0644'                                                                  
+  - name: Enable Mise Repo
+    community.general.dnf_config_manager:
+    name: mise
+    state: enabled
+  
+
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
 
 
