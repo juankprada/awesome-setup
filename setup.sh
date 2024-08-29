@@ -37,12 +37,12 @@ name=Charm
 baseurl=https://repo.charm.sh/yum/
 enabled=1
 gpgcheck=1
-gpgkey=https://repo.charm.sh/yum/gpg.key' | sudo tee /etc/yum.repos.d/charm.repo
+gpgkey=https://repo.charm.sh/yum/gpg.key' | sudo tee /etc/yum.repos.d/charm.repo >/dev/null 2>&1
     sudo rpm --import https://repo.charm.sh/yum/gpg.key
     
     sudo dnf install -y gum >/dev/null
 
-    sudo dnf install -y ansible >/dev/null
+    sudo dnf install -y ansible python3-psutil >/dev/null
 }
 
 
