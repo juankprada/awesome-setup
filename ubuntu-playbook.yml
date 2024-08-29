@@ -95,7 +95,6 @@
             - zenity
             - optipng
             - sed
-            - awk
             - make
             - sshpass
             - pango1.0-tools
