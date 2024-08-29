@@ -58,7 +58,13 @@
       src: templates/mise.repo.j2                                                    
       dest: /etc/yum.repos.d/mise.repo                                       
       mode: '0644'                                                                  
-  
+
+  - name: Install DNF plugins core
+    dnf:
+      name:
+        - mise
+      state: latest
+
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
 
 
