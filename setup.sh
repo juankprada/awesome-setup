@@ -76,13 +76,9 @@ ascii_art='   ______           __
 
 '
 
-
-
-
-
 # Make sure we have ansible collections
 ansible-galaxy collection install community.general
-
+ansible-galaxy role install Comcast.sdkman
 
 
 
