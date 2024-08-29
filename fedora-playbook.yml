@@ -139,63 +139,6 @@
         - core
       when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
 
-    - name: Install Nvidia Packages
-      become: true
-      dnf:
-        name:
-          - akmod-nvidia
-          - xorg-x11-drv-nvidia-cuda
-          - nvidia-vaapi-driver
-          - nvidia-settings
-          - xorg-x11-drv-nvidia-power
-          - vulkan
-          - vulkan-tools
-          - xorg-x11-drv-nvidia-cuda-libs
-          - nvidia-vaapi-driver
-          - libva-utils
-          - vdpauinfo
-      tags:
-        - setup
-        - install
-        - core
-      when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
-
-    - name: Enable Nvidia Suspend scripts
-      systemd:
-        name: nvidia-suspend
-        enabled: true
-      become: yes
-      tags:
-        - install
-        - core
-        - art
-        - 0ad
-      when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
-       
-       
-    - name: enable Nvidia Resume scripts
-      systemd:
-        name: nvidia-resume
-        enabled: true
-      become: yes
-      tags:
-        - install
-        - core
-        - art
-        - 0ad
-      when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
-       
-    - name: enable Nvidia Hibernate Scripts
-      systemd:
-        name: nvidia-hibernate
-        enabled: true
-      become: yes
-      tags:
-        - install
-        - core
-        - art
-        - 0ad
-      when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
        
     - name: Fix Numphy  setup correctly on modprobe
       shell: |
@@ -240,6 +183,8 @@
       when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
 
 
+    - import_tasks: tasks/nvidia-drivers.yml
+    
     - import_tasks: tasks/bash.yml
 
     - import_tasks: tasks/java-environment.yml

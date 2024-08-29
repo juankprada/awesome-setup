@@ -18,8 +18,8 @@
         upgrade: "safe"
       when: ansible_distribution == 'Ubuntu'
       tags:
-        - pkg
-        - ubuntu
+      - pkg
+      - ubuntu
 
        
     - name: Install dependencies
@@ -28,108 +28,97 @@
         become: true                          
         apt:                                  
           name:                               
-            - build-essential                 
-            - cmake                           
-            - pkg-config                      
-            - libpthread-stubs0-dev
-            - autoconf
-            - gpg
-            - wget
-            - bison                   
-            - libssl-dev              
-            - libreadline-dev         
-            - zlib1g-dev              
-            - libyaml-dev             
-            - libreadline-dev         
-            - libncurses5-dev         
-            - libffi-dev              
-            - libgdbm-dev             
-            - libjemalloc2            
-            - libvips                 
-            - imagemagick             
-            - libmagickwand-dev       
-            - mupdf                   
-            - mupdf-tools             
-            - gir1.2-gtop-2.0         
-            - gir1.2-clutter-1.0      
-            - redis-tools             
-            - sqlite3                 
-            - libsqlite3-0            
-            - libmysqlclient-dev      
-            - libpq-dev               
-            - postgresql-client       
-            - postgresql-client-common
+          - autoconf                        
+          - bison                           
+          - cmake                           
+          - gir1.2-clutter-1.0              
+          - gir1.2-gtop-2.0                 
+          - gpg                             
+          - imagemagick                     
+          - libffi-dev                      
+          - libgdbm-dev                     
+          - libjemalloc2                    
+          - libmagickwand-dev               
+          - libmysqlclient-dev              
+          - libncurses5-dev                 
+          - libpq-dev                       
+          - libpthread-stubs0-dev           
+          - libreadline-dev                 
+          - libreadline-dev                 
+          - libsqlite3-0                    
+          - libssl-dev                      
+          - libvips                         
+          - libyaml-dev                     
+          - mupdf                           
+          - mupdf-tools                     
+          - pkg-config                      
+          - postgresql-client               
+          - postgresql-client-common        
+          - redis-tools                     
+          - sqlite3                         
+          - wget                            
+          - zlib1g-dev                      
+          - build-essential                 
         when: ansible_distribution == 'Ubuntu'
         tags:                                 
-          - pkg
-          - ubuntu                            
+        - pkg
+        - ubuntu                            
        
       - name: Core terminal tools
         become: true
         apt:                                  
           name:
-            - trash-cli
-            - fzf
-            - ripgrep
-            - bat
-            - eza
-            - zoxide
-            - plocate
-            - btop
-            - fd-find
-            - tldr
-            - curl                            
-            - git                             
-            - unzip                           
-            - libtool                         
-            - gettext                         
-            - jq                              
-            - stow                            
-            - tmux
-            - lsof
-            - moreutils
-            - alacritty
-            - renameutils
-            - coreutils
-            - rsync
-            - zenity
-            - optipng
-            - sed
-            - make
-            - sshpass
-            - pango1.0-tools
-            - xclip
+          - alacritty
+          - bat      
+          - btop     
+          - coreutils
+          - curl                            
+          - eza      
+          - fd-find  
+          - fzf      
+          - gettext                         
+          - git                             
+          - jq                              
+          - libtool                         
+          - lsof     
+          - make     
+          - moreutils
+          - optipng  
+          - pango1.0-tools
+          - plocate  
+          - renameutils
+          - ripgrep  
+          - rsync    
+          - sed      
+          - sshpass  
+          - stow                            
+          - tldr     
+          - tmux     
+          - unzip                           
+          - xclip    
+          - zenity   
+          - zoxide   
+          - trash-cli
         tags:                                 
-          - pkg
-          - ubuntu                            
+        - pkg
+        - ubuntu                            
         when: ansible_distribution == 'Ubuntu'
-
-    - name: Install Nvidia drivers
-      become: true
-      shell:
-        cmd: ubuntu-drivers install
-
-    - name: Installing extra video tools
-      become: true
-      apt:
-       name:
-       - nvidia-vaapi-driver
-       - vdpauinfo
-
+    
     - name: Install Recommended Apps
       become: true
       apt:
         name:
-        - mypaint
-        - hugin
-        - peek
         - audacity
+        - flatpak
         - fontforge
         - fontforge-common
         - fontforge-extras
-        - vulkan-tools
-        - flatpak
         - gimp
+        - hugin
+        - peek
+        - mypaint
+
+    - import_tasks: tasks/nvidia-drivers.yml
 
     - import_tasks: tasks/bash.yml
 
