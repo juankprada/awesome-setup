@@ -1,12 +1,12 @@
-- name: Install Mise                                                                
+- name: Install Mise in Ubuntu
   become: yes                                                                       
   block:                                                                            
   - name: Create /etc/apt/keyrings directory                                        
     file:                                                                           
       path: /etc/apt/keyrings                                                       
       state: directory                                                              
-      mode: '0755'                                                                  
-                                                                                    
+      mode: '0755'
+    
   - name: Download mise gpg keys                                                    
     ansible.builtin.get_url:                                                        
       url: https://mise.jdx.dev/gpg-key.pub                                         
@@ -40,8 +40,27 @@
     apt:                                                                            
       name: mise                                                                    
       state: present                                                                
-                                                                                    
-                                                                                    
+  when: ansible_distribution == 'Ubuntu'                                                                                    
+
+
+- name: Install Mise in Fedora
+  become: yes                                                                       
+  block:                                                                            
+  - name: Install DNF plugins core
+    become: yes
+    dnf:
+      name:
+      - dnf-plugins-core
+    state: latest
+  - name: Enable Mise repo
+    dnf:
+      name: "https://mise.jdx.dev/rpm/mise.repo"
+      state: present
+      disable_gpg_check: True
+    become: yes
+  when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+
+
 - name: Install Ruby Development environment                                        
   become: no                                                                        
   block:                                                                            
