@@ -73,7 +73,7 @@
     - name: Swapp ffmpeg packages
       become: true                                                                                                        
       shell: |                                                                                                            
-        dnf swap ffmpeg-free ffmpeg --allowerasing                                                                        
+        dnf swap ffmpeg-free ffmpeg --allowerasing -y
       when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
 
     - name: Install System Packages (zsh, emacs, curl, git, lua, unzip, libtool, gettext)
