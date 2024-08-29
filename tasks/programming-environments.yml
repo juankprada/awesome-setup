@@ -61,8 +61,8 @@
 
   - name: Enable Mise Repo
     community.general.dnf_config_manager:
-    name: mise
-    state: enabled
+      name: mise
+      state: enabled
   
 
   when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'

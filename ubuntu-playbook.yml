@@ -13,7 +13,7 @@
       when: running_gnome == 'true'
 
     - name: Update Ubuntu packages
-      become: true
+      become: yes
       apt:
         upgrade: "safe"
       when: ansible_distribution == 'Ubuntu'
