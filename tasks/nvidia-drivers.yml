@@ -1,0 +1,58 @@
+- name: Install Nvidia drivers and tools in Ubuntu
+  block:
+  - name: Install Nvidia drivers
+    become: true
+    shell:
+      cmd: ubuntu-drivers install
+
+  - name: Installing extra video tools
+    become: true
+    apt:
+      name:
+      - nvidia-vaapi-driver
+      - vdpauinfo
+      - vulkan-tools
+  when: ansible_distribution == 'Ubuntu'
+  tags:
+  - drivers
+  - ubuntu
+
+- name: Install Nvidia drivers and tools under Fedora
+  block:
+  - name: Install Nvidia Packages
+    become: true
+    dnf:
+      name:
+        - akmod-nvidia
+        - xorg-x11-drv-nvidia-cuda
+        - nvidia-vaapi-driver
+        - nvidia-settings
+        - xorg-x11-drv-nvidia-power
+        - vulkan
+        - vulkan-tools
+        - xorg-x11-drv-nvidia-cuda-libs
+        - nvidia-vaapi-driver
+        - libva-utils
+        - vdpauinfo
+    
+  - name: Enable Nvidia Suspend scripts
+    systemd:
+      name: nvidia-suspend
+      enabled: true
+    become: yes
+      
+  - name: enable Nvidia Resume scripts                                                                                  
+    systemd:                                                                                                            
+      name: nvidia-resume                                                                                               
+      enabled: true                                                                                                     
+    become: yes                                                                                                         
+      
+  - name: enable Nvidia Hibernate Scripts                                                                               
+    systemd:                                                                                                            
+      name: nvidia-hibernate                                                                                            
+      enabled: true                                                                                                     
+    become: yes                                                                                                         
+  when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+  tags:
+  - drivers
+  - fedora
