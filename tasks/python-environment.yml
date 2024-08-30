@@ -14,11 +14,7 @@
     when: ansible_distribution == 'Ubuntu'
 
   - name: Install latest versions of python in Fedora
-    become: true
-    dnf:
-      name:
-      - pipenv
-      state: latest
+    shell: pip install --user pipenv    
     when: ansible_distribution == 'Fedora'
     
   when: install_python_env == 'true'
