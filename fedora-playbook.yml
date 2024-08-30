@@ -75,6 +75,7 @@
           - zlib-devel
           - gdbm-devel
           - ncurses-devel
+          - glibc-devel
         state: latest                                                                                                     
         allowerasing: true                                                                                                
       tags:                                                                                                               
@@ -204,8 +205,12 @@
 
     - import_tasks: tasks/ruby-environment.yml
 
-    - import_tasks: tasks/programming-environments.yml
-    
+    - import_tasks: tasks/nodejs-environment.yml
+
+    - import_tasks: tasks/go-environment.yml
+
+    - import_tasks: tasks/python-environment.yml
+
     - import_tasks: tasks/flatpack.yml
 
     - import_tasks: tasks/gnome-post-tasks.yml

@@ -1,0 +1,33 @@
+- name: Install Go Development environment in Linux
+  become: no
+  block:
+  - name: Check if GVM is installed
+    stat:
+      path: "{{ ansible_env.HOME }}/.gvm/scripts/gvm"
+    register: gvm_installed
+
+  - name: Install GVM
+    ansible.builtin.shell: >
+      bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
+    args:
+      creates: "{{ ansible_env.HOME }}/.gvm/scripts/gvm"
+    when: gvm_installed.stat.exists == False
+
+  - name: Install Go
+    shell: |
+     source {{ ansible_env.HOME }}/.gvm/scripts/gvm
+     gvm install go1.4 -B
+     gvm use go1.4
+     export GOROOT_BOOTSTRAP=$GOROOT
+     gvm install go1.17.13
+     gvm use go1.17.13
+     export GOROOT_BOOTSTRAP=$GOROOT
+     gvm install go1.20
+     gvm use go1.20
+     export GOROOT_BOOTSTRAP=$GOROOT
+     gvm install go1.23
+     gvm use go1.23
+    args:
+      executable: /bin/bash
+  
+  when: install_go_env == 'true' and (ansible_distribution == 'Ubuntu' or ansible_distribution == 'Fedora')

@@ -65,7 +65,10 @@
           - sqlite3                         
           - wget                            
           - zlib1g-dev                      
-          - build-essential                 
+          - build-essential
+          - mercurial
+          - binutils
+          - gcc
         when: ansible_distribution == 'Ubuntu'
         tags:                                 
         - pkg
@@ -133,8 +136,12 @@
 
     - import_tasks: tasks/ruby-environment.yml
 
-    - import_tasks: tasks/programming-environments.yml
-    
+    - import_tasks: tasks/nodejs-environment.yml
+
+    - import_tasks: tasks/go-environment.yml
+
+    - import_tasks: tasks/python-environment.yml
+
     - import_tasks: tasks/flatpack.yml
 
     - import_tasks: tasks/gnome-post-tasks.yml

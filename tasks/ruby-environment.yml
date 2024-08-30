@@ -28,7 +28,7 @@
       dest: "~/.rbenv/plugins/ruby-build"
 
   - name: Installing Ruby
-    shell: eval "$(~/.rbenv/bin/rbenv init - --no-rehash bash)" && rbenv install 3.3.4
+    shell: eval "$(~/.rbenv/bin/rbenv init - --no-rehash bash)" && rbenv install --skip-existing 3.3.4 
     args:
       executable: /bin/bash
 

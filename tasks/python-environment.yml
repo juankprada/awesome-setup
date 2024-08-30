@@ -1,0 +1,24 @@
+- name: Install Python development environment on Linux
+  block:
+  - name: Install latest version of python in Ubuntu
+    become: true
+    apt:
+      name:
+      - python3-venv
+      - python3-pip
+      - pipx
+    when: ansible_distribution == 'Ubuntu'
+
+  - name: Install Pipenv
+    shell: pipx install pipenv
+    when: ansible_distribution == 'Ubuntu'
+
+  - name: Install latest versions of python in Fedora
+    become: true
+    dnf:
+      name:
+      - pipenv
+      state: latest
+    when: ansible_distribution == 'Fedora'
+    
+  when: install_python_env == 'true'

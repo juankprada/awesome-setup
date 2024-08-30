@@ -1,0 +1,20 @@
+- name: Install Elixir (and Erlang) development Environment
+  become: no
+  block:
+  - name: Check if Kerl is installed
+    stat:
+      path: "{{ ansible_env.HOME }}/.local/bin/kerl"
+    register: kerl_installed
+
+  - name: Download Kerl (Erlan manager)
+    ansible.builtin.get_url:
+      url: https://raw.githubusercontent.com/kerl/kerl/master/kerl
+      dest: "{{ ansible_env.HOME }}/.local/bin/kerl"
+      mode: a+x
+    args:
+      creates: "{{ ansible_env.HOME }}/.local/bin/kerl"
+    when: kerl_installed.stat.exists == False
+
+  - name: Upgrade Kerl
+    shell: kerl upgrade
+    
