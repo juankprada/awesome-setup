@@ -48,8 +48,9 @@
     shell: rbenv init
     args:
       executable: /bin/bash
+
   - name: Installing Ruby
-    shell: eval "$(rbenv init - bash)" && rbenv install 3.3.4
+    shell: eval "$(rbenv init - --no-rehash bash)" && rbenv install 3.3.4
     args:
       executable: /bin/bash
   when: install_ruby_env == 'true' and ansible_distribution == 'Fedora'
