@@ -43,14 +43,9 @@
       - rbenv
       state: latest
     become: yes
-
-  - name: Configure Rbenv - Fedora
-    shell: rbenv init &> /dev/null
-    args:
-      executable: /bin/bash
-
+      
   - name: Installing Ruby - Fedora
-    shell: eval "$(rbenv init - --no-rehash bash &> /dev/null)" && rbenv install 3.3.4
+    shell: eval "$(rbenv init)" && rbenv install 3.3.4
     args:
       executable: /bin/bash
   when: install_ruby_env == 'true' and ansible_distribution == 'Fedora'
