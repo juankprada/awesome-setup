@@ -1,4 +1,4 @@
-- name: Install Ruby Development environment in Ubuntu
+- name: Install Ruby Development environment in Linux
   become: no
   block:
   - name: Check if Rbenv is installed
@@ -6,7 +6,7 @@
       path: "~/.rbenv/bin/rbenv"
     register: rbenv_installed
 
-  - name: Install Rbenv in Ubuntu
+  - name: Install Rbenv
     ansible.builtin.git:
       repo: "https://github.com/rbenv/rbenv.git"
       dest: "~/.rbenv"
@@ -32,20 +32,5 @@
     args:
       executable: /bin/bash
 
-  when: install_ruby_env == 'true' and ansible_distribution == 'Ubuntu'
+  when: install_ruby_env == 'true' and (ansible_distribution == 'Ubuntu' or ansible_distribution == 'Fedora')
 
-
-- name: Install Ruby Development environment in Fedora
-  block:
-  - name: Install Rbenv - Fedora
-    dnf:
-      name:
-      - rbenv
-      state: latest
-    become: yes
-      
-  - name: Installing Ruby - Fedora
-    shell: eval "$(rbenv init)" && rbenv install 3.3.4
-    args:
-      executable: /bin/bash
-  when: install_ruby_env == 'true' and ansible_distribution == 'Fedora'
