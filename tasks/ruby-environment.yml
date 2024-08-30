@@ -37,19 +37,19 @@
 
 - name: Install Ruby Development environment in Fedora
   block:
-  - name: Install rbenv
+  - name: Install Rbenv - Fedora
     dnf:
       name:
       - rbenv
       state: latest
     become: yes
 
-  - name: Configure Rbenv
-    shell: rbenv init
+  - name: Configure Rbenv - Fedora
+    shell: rbenv init > /dev/null
     args:
       executable: /bin/bash
 
-  - name: Installing Ruby
+  - name: Installing Ruby - Fedora
     shell: eval "$(rbenv init - --no-rehash bash)" && rbenv install 3.3.4
     args:
       executable: /bin/bash
