@@ -152,6 +152,8 @@
     - import_tasks: tasks/gnome-improvement.yml
 
     - import_tasks: tasks/gnome-theme.yml
+
+    - import_tasks: tasks/emacs-server.yml
     
     - import_tasks: tasks/gnome-post-tasks.yml
         

@@ -19,9 +19,14 @@
       tags:         
         - dotfiles  
                     
-    - name: Stow dotfiles
-      shell: cd {{ projects }}/dotfiles && chmod +x install &&  ./install_linux.sh
+    - name: Stow dotfiles Linux
+      shell: cd {{ projects }}/dotfiles && chmod +x install_linux.sh && ./install_linux.sh
       tags:
         - dotfiles
       when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Fedora'
+    - name: Stow dotfiles Macos
+      shell: cd {{ projects }}/dotfiles && chmod +x install_macos.sh && ./install_macos.sh
+      tags:
+        - dotfiles
+      when: ansible_distribution == 'Darwin'
       
