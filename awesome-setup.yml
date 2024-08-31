@@ -17,3 +17,7 @@
 - name: Include fedora-playbook
   import_playbook: fedora-playbook.yml
   when: ansible_distribution == 'Fedora'
+
+- name: Include Dotfiles-playbook
+  import_plaubook: dotfiles-playbook.yml
+  

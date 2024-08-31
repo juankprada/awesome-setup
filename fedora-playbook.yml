@@ -213,4 +213,10 @@
 
     - import_tasks: tasks/flatpack.yml
 
+    - import_tasks: tasks/fonts.yml
+
+    - import_tasks: tasks/gnome-improvement.yml
+
+    - import_tasks: tasks/gnome-theme.yml
+
     - import_tasks: tasks/gnome-post-tasks.yml

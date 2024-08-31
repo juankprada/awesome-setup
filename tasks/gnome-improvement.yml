@@ -1,0 +1,408 @@
+- name: Improve Gnome Experience
+  block:
+  - name: Install gnome tools in Fedora
+    dnf:
+      name:
+      - gnome-tweaks
+      - sushi
+    when: ansible_distribution == "Fedora"
+
+  - name: Install Extension Manager in Fedora
+    community.general.flatpak:
+      name:
+        - com.mattjakeman.ExtensionManager
+      state: present
+      method: user
+    tags:
+      - install
+      - flatpak
+    when: ansible_distribution == "Fedora"
+
+
+  - name: Install gnome tools in Ubuntu
+    become: true
+    apt:
+      name:
+      - gnome-software-plugin-flatpak #Software center flatpak integration
+      - gnome-tweak-tool # Tweak Gnome
+      - gnome-sushi # Previews on File manager when pressing space
+      - gnome-shell-extension-manager
+    when: ansible_distribution  == 'Ubuntu'
+
+  - name: Install CLI tool to manage GNOME extensions
+    shell: pipx install gnome-extensions-cli
+    when: ansible_distribution == 'Ubuntu'
+
+  - name: Install and enable GNOME extensions
+    ansible.builtin.shell: |
+       gext -F install tactile@lundal.io
+       gext -F install just-perfection-desktop@just-perfection
+       gext -F install blur-my-shell@aunetx
+       gext -F install space-bar@luchrioh
+       gext -F install undecorate@sun.wxg@gmail.com
+       gext -F install tophat@fflewddur.github.io
+       gext -F install AlphabeticalAppGrid@stuarthayhurst
+       gext -F install dash-to-dock@micheleg
+
+
+  - name: Compile gsettings schemas
+    become: true
+    ansible.builtin.shell: |
+      cp ~/.local/share/gnome-shell/extensions/tactile@lundal.io/schemas/org.gnome.shell.extensions.tactile.gschema.xml /usr/share/glib-2.0/schemas/
+      cp ~/.local/share/gnome-shell/extensions/just-perfection-desktop\@just-perfection/schemas/org.gnome.shell.extensions.just-perfection.gschema.xml /usr/share/glib-2.0/schemas/
+      cp ~/.local/share/gnome-shell/extensions/blur-my-shell\@aunetx/schemas/org.gnome.shell.extensions.blur-my-shell.gschema.xml /usr/share/glib-2.0/schemas/
+      cp ~/.local/share/gnome-shell/extensions/space-bar\@luchrioh/schemas/org.gnome.shell.extensions.space-bar.gschema.xml /usr/share/glib-2.0/schemas/
+      cp ~/.local/share/gnome-shell/extensions/tophat@fflewddur.github.io/schemas/org.gnome.shell.extensions.tophat.gschema.xml /usr/share/glib-2.0/schemas/
+      cp ~/.local/share/gnome-shell/extensions/AlphabeticalAppGrid\@stuarthayhurst/schemas/org.gnome.shell.extensions.AlphabeticalAppGrid.gschema.xml /usr/share/glib-2.0/schemas/
+      cp ~/.local/share/gnome-shell/extensions/dash-to-dock\@micheleg/schemas/org.gnome.shell.extensions.dash-to-dock.gschema.xml /usr/share/glib-2.0/schemas/
+      glib-compile-schemas /usr/share/glib-2.0/schemas/
+
+  - name: Configure Just Perfection Desktop
+    block:
+    - name: Set animations
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/just-perfection/animation"
+        value: 4
+        state: present
+    - name: Set Dash app running
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/just-perfection/dash-app-running"
+        value: true
+        state: present
+    - name: Set Workspaces
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/just-perfection/workspace"
+        value: true
+        state: present
+    - name: Set Workspaces
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/just-perfection/workspace-popup"
+        value: true
+        state: present
+
+
+
+  - name: Configure Tactile
+    block:
+    - name: Set col-0
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/tactile/col-0"
+        value: 1
+        state: present
+    - name: Set col-1
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/tactile/col-1"
+        value: 2
+        state: present
+    - name: Set col-2
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/tactile/col-2"
+        value: 1
+        state: present
+    - name: Set col-3
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/tactile/col-3"
+        value: 0
+        state: present
+    - name: Set row-0
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/tactile/row-0"
+        value: 1
+        state: present
+    - name: Set row-1
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/tactile/row-1"
+        value: 1
+        state: present
+    - name: Set gap-size
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/tactile/gap-size"
+        value: 32
+        state: present
+
+  - name: Configure blur shell
+    block:
+    - name: set appfolder blur
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/blur-my-shell/appfolder/blur"
+        value: false
+        state: present
+    - name: set lockscreen blur
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/blur-my-shell/lockscreen/blur"
+        value: false
+        state: present
+    - name: set screenshot blur
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/blur-my-shell/screenshot/blur"
+        value: false
+        state: present
+    - name: set window-list blur
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/blur-my-shell/window-list/blur"
+        value: false
+        state: present
+    - name: set panel blur
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/blur-my-shell/panel/blur"
+        value: false
+        state: present
+    - name: set overview blur
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/blur-my-shell/overview/blur"
+        value: true
+        state: present
+    - name: set pipeline
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/blur-my-shell/overview/pipeline"
+        value: "'pipeline_default'"
+        state: present
+    - name: set dash to dock blur
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/blur-my-shell/dash-to-dock/blur"
+        value: true
+        state: present
+    - name: set brightness
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/blur-my-shell/dash-to-dock/brightness"
+        value: 0.6
+        state: present
+    - name: set sigma
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/blur-my-shell/dash-to-dock/sigma"
+        value: 30
+        state: present
+    - name: set static-blur
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/blur-my-shell/dash-to-dock/static-blur"
+        value: true
+        state: present
+    - name: set style dash to dock
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/blur-my-shell/dash-to-dock/style-dash-to-dock"
+        value: 0
+        state: present
+
+  - name: Configure Space bar
+    block:
+    - name: Set Smart workspace names to false
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/space-bar/behavior/smart-workspace-names"
+        value: false
+        state: present
+
+    - name: Set activate workspace shotcuts to dalse
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/space-bar/shortcuts/enable-activate-workspace-shortcuts"
+        value: false
+        state: present
+
+    - name: Set move to workspace shortcuts to ture
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/space-bar/shortcuts/enable-move-to-workspace-shortcuts"
+        value: true
+        state: present
+
+    - name: Set open menu
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/space-bar/shortcuts/open-menu" 
+        value: "@as []"
+        state: present
+
+  - name: Configure Top Hat
+    block:
+    - name: Set to show icons
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/tophat/show-icons"
+        value: false
+        state: present
+    - name: Set to show cpu
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/tophat/show-cpu"
+        value: false
+        state: present
+    - name: Set to show disk
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/tophat/show-disk"
+        value: false
+        state: present
+    - name: Set to show memory
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/tophat/show-mem"
+        value: false
+        state: present
+    - name: Set network usage unit
+      community.general.dconf:
+        key: "/org/gnome/shell/extensions/tophat/network-usage-unit"
+        value: "'bits'"
+        state: present
+
+  - name: Configure Alphabetical App Grid
+    community.general.dconf:
+      key: "/org/gnome/shell/extensions/alphabetical-app-grid/folder-order-position"
+      value: "'end'"
+      state: present
+
+  - name: Set Gnome keybindings
+    block:
+    - name: Make it easy to maximize like you can fill left/right
+      community.general.dconf:
+        key: "/org/gnome/desktop/wm/keybindings/maximize"
+        value: "['<Super>Up']"
+        state: present
+        
+    - name: Full-screen with title/navigation bar
+      community.general.dconf:
+        key: "/org/gnome/desktop/wm/keybindings/toggle-fullscreen"
+        value: "['<Shift>F11']"
+        state: present
+        
+    - name: Use 6 fixed workspaces instead of dynamic mode
+      block:
+      - name: set dynamic to fals
+        community.general.dconf:
+          key: "/org/gnome/mutter/dynamic-workspaces"
+          value: false
+          state: present
+      - name: set workspace number
+        community.general.dconf:
+          key: "/org/gnome/desktop/wm/preferences/num-workspaces"
+          value: 6
+          state: present
+
+    - name: Use Alt for pinned apps
+      block:
+      - name: Alt+1
+        community.general.dconf:
+          key: "/org/gnome/shell/keybindings/switch-to-application-1"
+          value: "['<Alt>1']"
+          state: present
+      - name: Alt+2
+        community.general.dconf:
+          key: "/org/gnome/shell/keybindings/switch-to-application-2"
+          value: "['<Alt>2']"
+          state: present
+      - name: Alt+3
+        community.general.dconf:
+          key: "/org/gnome/shell/keybindings/switch-to-application-3"
+          value: "['<Alt>3']"
+          state: present
+      - name: Alt+4
+        community.general.dconf:
+          key: "/org/gnome/shell/keybindings/switch-to-application-4"
+          value: "['<Alt>4']"
+          state: present
+      - name: Alt+5
+        community.general.dconf:
+          key: "/org/gnome/shell/keybindings/switch-to-application-5"
+          value: "['<Alt>5']"
+          state: present
+      - name: Alt+6
+        community.general.dconf:
+          key: "/org/gnome/shell/keybindings/switch-to-application-6"
+          value: "['<Alt>6']"
+          state: present
+      - name: Alt+7
+        community.general.dconf:
+          key: "/org/gnome/shell/keybindings/switch-to-application-7"
+          value: "['<Alt>7']"
+          state: present
+      - name: Alt+8
+        community.general.dconf:
+          key: "/org/gnome/shell/keybindings/switch-to-application-8"
+          value: "['<Alt>8']"
+          state: present
+      - name: Alt+9
+        community.general.dconf:
+          key: "/org/gnome/shell/keybindings/switch-to-application-9"
+          value: "['<Alt>9']"
+          state: present
+
+    - name: Use super for workspaces
+      block:
+      - name: Super+1
+        community.general.dconf:
+          key: "/org/gnome/desktop/wm/keybindings/switch-to-workspace-1"
+          value: "['<Super>1']"
+          state: present
+      - name: Super+2
+        community.general.dconf:
+          key: "/org/gnome/desktop/wm/keybindings/switch-to-workspace-2"
+          value: "['<Super>2']"
+          state: present
+      - name: Super+3
+        community.general.dconf:
+          key: "/org/gnome/desktop/wm/keybindings/switch-to-workspace-3"
+          value: "['<Super>3']"
+          state: present
+      - name: Super+4
+        community.general.dconf:
+          key: "/org/gnome/desktop/wm/keybindings/switch-to-workspace-4"
+          value: "['<Super>4']"
+          state: present
+      - name: Super+5
+        community.general.dconf:
+          key: "/org/gnome/desktop/wm/keybindings/switch-to-workspace-5"
+          value: "['<Super>5']"
+          state: present
+      - name: Super+6
+        community.general.dconf:
+          key: "/org/gnome/desktop/wm/keybindings/switch-to-workspace-6"
+          value: "['<Super>6']"
+          state: present
+
+
+    - name: Reserve slots for custom keybindings
+      community.general.dconf:
+        key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings"
+        value: "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/']"
+        state: present
+
+    - name: Set ulauncher to Super+Space
+      block:
+      - name: Switch input source
+        community.general.dconf:
+          key: "/org/gnome/desktop/wm/keybindings/switch-input-source"
+          value: "@as []"
+          state: present
+      - name: Set keybindings
+        shell: |
+          gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name 'ulauncher-toggle'
+          gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command 'ulauncher-toggle'
+          gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding '<Super>space'
+
+      - name: Set flameshot keybindings
+        shell: |
+          gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ name 'Flameshot'
+          gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ command 'sh -c -- "flameshot gui"'
+          gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ binding '<Control>Print'
+
+      - name: Start a new Alacritty window
+        shell: |
+          gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/ name 'alacritty'
+          gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/ command 'alacritty'
+          gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/ binding '<Super>Return'
+
+      - name: Start a new Emacs client window
+        shell: |
+          gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/ name 'new emacs'
+          gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/ command 'emacs-client'
+          gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/ binding '<Super>E'
+        
+
+    - name: Center new windows in the middle of the screen
+      community.general.dconf:
+        key: "/org/gnome/mutter/center-new-windows"
+        value: true
+        state: present
+
+    - name: Set Cascadia Mono as the default monospace font
+      community.general.dconf:
+        key: "/org/gnome/desktop/interface/monospace-font-name"
+        value: "'CaskaydiaMono Nerd Font 11'"
+        state: present
+
+
+  
+
+  when: running_gnome == 'true'

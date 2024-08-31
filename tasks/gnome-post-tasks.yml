@@ -6,7 +6,6 @@
       value: "{{ orig_gnome_lock_enabled['value'] }}"
       state: present             
     register:                    
-    when: running_gnome == 'true'
                                  
   - name: Register original Idle Delay value
     community.general.dconf:     
@@ -14,4 +13,4 @@
       value: "{{ orig_gnome_idle_delay['value'] }}"
       state: present             
     register:                    
-    when: running_gnome == 'true'
+  when: running_gnome == 'true'

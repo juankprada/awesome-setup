@@ -1,0 +1,27 @@
+---
+- name: Dotfiles Setup
+  hosts: localhost
+  connection: local
+  vars:
+    ansible_become_password: '{{ lookup("env", "ANSIBLE_BECOME_PASSWORD") }}'
+  vars_files:
+    - ./vars.yml
+  tasks:
+    - name: Cloning .dotfiles
+      git:          
+        clone: yes  
+        repo: 'git@github.com:juankprada/dotfiles.git'
+        dest: "{{ projects }}/dotfiles"
+        update: yes 
+        accept_hostkey: yes
+        version: main
+        key_file: "{{ lookup('env', 'HOME') }}/.ssh/{{ssh_key_name}}"
+      tags:         
+        - dotfiles  
+                    
+    - name: Stow dotfiles
+      shell: cd {{ projects }}/dotfiles && chmod +x install &&  ./install_linux.sh
+      tags:
+        - dotfiles
+      when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Fedora'
+      

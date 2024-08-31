@@ -1,0 +1,55 @@
+- name: Sets recommended Gnome Theme
+  block:
+  - name: Sets color scheme
+    dconf:
+      key: "/org/gnome/desktop/interface/color-scheme"
+      value: "'prefer-dark'"
+      state: present
+  - name: Sets cursor to Yaru
+    dconf:
+      key: "/org/gnome/desktop/interface/cursor-theme"
+      value: "'Yaru'"
+      state: present
+  - name: Sets Gtk theme
+    dconf:
+      key: "/org/gnome/desktop/interface/gtk-theme"
+      value: "'Yaru-purple-dark'"
+      state: present
+  - name: Sets Icon theme
+    dconf:
+      key: "/org/gnome/desktop/interface/icon-theme"
+      value: "'Yaru-purple'"
+      state: present
+
+  - name: Make sure Local Background directory exist
+    file:
+      path: "{{ ansible_env.HOME }}/.local/share/backgrounds"
+      state: directory
+
+  - name: Copy  Wallpapers
+    copy:
+      src: "{{ playbook_dir }}/wallpapers/"
+      dest: "{{ ansible_env.HOME }}/.local/share/backgrounds"
+      remote_src: yes
+      directory_mode: yes
+      
+      
+  - name: Set Gnome wallpaper
+    block:
+    - name: Sets picture URI
+      dconf:
+        key: "/org/gnome/desktop/background/picture-uri"
+        value: "'{{ ansible_env.HOME }}/.local/share/backgrounds/mountain.png'"
+        state: present
+    
+    - name: Sets picture URI dark
+      dconf:
+        key: "/org/gnome/desktop/background/picture-uri-dark"
+        value: "'{{ ansible_env.HOME }}/.local/share/backgrounds/mountain.png'"
+        state: present
+
+    - name: Sets picture zoom
+      dconf:
+       key: "/org/gnome/desktop/background/picture-options"
+       value: "'zoom'"
+       state: present
