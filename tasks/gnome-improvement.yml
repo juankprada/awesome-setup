@@ -1,6 +1,7 @@
 - name: Improve Gnome Experience
   block:
   - name: Install gnome tools in Fedora
+    become: true
     dnf:
       name:
       - gnome-tweaks
