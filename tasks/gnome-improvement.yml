@@ -32,7 +32,7 @@
 
   - name: Install CLI tool to manage GNOME extensions
     shell: pipx install gnome-extensions-cli
-    when: ansible_distribution == 'Ubuntu'
+    
 
   - name: Install and enable GNOME extensions
     ansible.builtin.shell: |
