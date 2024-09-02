@@ -186,6 +186,7 @@
       become: true
       dnf:
         name:
+          - ulauncher
           - flameshot
           - audacity
           - mypaing
