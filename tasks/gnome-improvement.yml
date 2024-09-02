@@ -6,6 +6,7 @@
       name:
       - gnome-tweaks
       - sushi
+      - yaru-theme
     when: ansible_distribution == "Fedora"
 
   - name: Install Extension Manager in Fedora
