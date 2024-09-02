@@ -30,9 +30,13 @@
       - gnome-shell-extension-manager
     when: ansible_distribution  == 'Ubuntu'
 
-  - name: Install CLI tool to manage GNOME extensions
+  - name: Install CLI tool to manage GNOME extensions in Ubuntu
     shell: pipx install gnome-extensions-cli
-    
+    when: ansible_distribution  == 'Ubuntu'
+
+  - name: Install CLI tool fo manage GNOME extensions in Fedora
+    shell: pip install --user gnome-extensions-cli
+    when: ansible_distribution == 'Fedora'
 
   - name: Install and enable GNOME extensions
     ansible.builtin.shell: |
