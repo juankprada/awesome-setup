@@ -94,6 +94,7 @@
       become: true
       dnf:
         name:
+          - lsb_release
           - gpg
           - wget
           - bison
