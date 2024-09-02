@@ -6,6 +6,10 @@
     ansible_become_password: '{{ lookup("env", "ANSIBLE_BECOME_PASSWORD") }}'
   vars_files:
     - ./vars.yml
+
+- name: Include Dotfiles-playbook
+  import_playbook: dotfiles-playbook.yml
+
 - name: Include macos-playbook
   import_playbook: macos-playbook.yml
   when: ansible_distribution == 'Darwin'
@@ -17,7 +21,3 @@
 - name: Include fedora-playbook
   import_playbook: fedora-playbook.yml
   when: ansible_distribution == 'Fedora'
-
-- name: Include Dotfiles-playbook
-  import_playbook: dotfiles-playbook.yml
-  
