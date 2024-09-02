@@ -120,6 +120,7 @@
         name:
         - flameshot # Better Screen shots
         - audacity
+        - inkscape
         - flatpak
         - fontforge
         - fontforge-common
