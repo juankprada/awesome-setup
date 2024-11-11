@@ -16,10 +16,10 @@
        enabled: true
        scope: user
 
-    - name: Start Emacs sercie
+    - name: Start Emacs service
       ansible.builtin.systemd_service:
         name: emacs
         state: started
         scope: user
-  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Fedora'
+  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Fedora' or ansible_distribution == 'Debian'
   

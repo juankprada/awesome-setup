@@ -17,6 +17,37 @@
   - drivers
   - ubuntu
 
+
+- name: Install Nvidia drivers and tools under Debian
+  block:
+  - name: Install drivers
+    become: true
+    apt:
+      name:
+      - nvidia-driver
+      - firmware-misc-nonfree
+      - vdpauinfo
+      - vulkan-tools
+      - libnvoptix1
+      - mesa-vulkan-drivers
+
+  - name: update apt cache
+    apt:
+      update_cache: yes
+    become: yes
+  - name: Install drivers
+    become: true
+    apt:
+      name:
+      - nvidia-driver-libs:i386
+      - libglx-mesa0:i386
+      - mesa-vulkan-drivers:i386
+      - libgl1-mesa-dri:i386
+  when: ansible_distribution == 'Debian'
+  tags:
+  - drivers
+  - debian
+
 - name: Install Nvidia drivers and tools under Fedora
   block:
   - name: Install Nvidia Packages

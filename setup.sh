@@ -31,6 +31,17 @@ install_dependencies_ubuntu() {
     sudo apt install ansible -y >/dev/null
 }
 
+install_dependencies_debian() {
+    sudo apt install curl > /dev/null
+    sudo mkdir -p /etc/apt/keyrings
+    curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg
+    echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list
+    sudo apt update > /dev/null
+    sudo apt install -y gum >/dev/null
+    sudo apt install -y software-properties-common >/dev/null
+    sudo apt install ansible -y >/dev/null
+}
+
 install_dependencies_fedora() {
     echo '[charm]
 name=Charm
@@ -48,7 +59,7 @@ gpgkey=https://repo.charm.sh/yum/gpg.key' | sudo tee /etc/yum.repos.d/charm.repo
 
 detect_linux_de() {
     export RUNNING_GNOME=$([[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]] && echo true || echo false)
-    export RUNNING_KDE=false
+    export RUNNING_KDE=$([[ "$XDG_CURRENT_DESKTOP" == *"KDE"* ]] && echo true || echo false)
 }
 		 
 
@@ -68,6 +79,10 @@ elif [ "$OS" = "Linux" ]; then
 	    fedora)
 		OS="Fedora"
 		install_dependencies_fedora
+	    ;;
+	    debian)
+	    OS="Debian"
+	    install_dependencies_debian
 	    ;;
 	    *)
 		echo "Unsupported distribution"

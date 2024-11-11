@@ -23,7 +23,7 @@
       shell: cd {{ projects }}/dotfiles && chmod +x install_linux.sh && ./install_linux.sh
       tags:
         - dotfiles
-      when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Fedora'
+      when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Fedora'  or ansible_distribution == 'Debian'
     - name: Stow dotfiles Macos
       shell: cd {{ projects }}/dotfiles && chmod +x install_macos.sh && ./install_macos.sh
       tags:

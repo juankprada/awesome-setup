@@ -17,13 +17,19 @@
       - com.brave.Browser
       - sh.cider.Cider
       - com.discordapp.Discord
-      - net.displaycal.DisplayCAL
       - net.cozic.joplin_desktop
       - org.gnome.World.PikaBackup
-      - com.getpostman.Postman
       - com.skype.Client
       - com.slack.Slack
       - us.zoom.Zoom
+      - org.inkscape.Inkscape
+      - org.kde.kdenlive
+      - com.obsproject.Studio
+      - org.blender.Blender
+      - org.gnome.gitlab.YaLTeR.VideoTrimmer
+      - org.gnome.gitlab.YaLTeR.Identity
+      - com.neatdecisions.Detwinner
+
     state: present
     method: user
   tags:
