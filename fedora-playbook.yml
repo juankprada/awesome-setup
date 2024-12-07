@@ -1,0 +1,234 @@
+---
+- name: Fedora Dev environment setup
+  hosts: localhost
+  connection: local
+  vars:
+    ansible_become_password: '{{ lookup("env", "ANSIBLE_BECOME_PASSWORD") }}'
+  vars_files:
+    - ./vars.yml
+  tasks:
+    - name: Set initial settings in Gnome Desktop
+      import_tasks: tasks/gnome-pre-task.yml
+      when: running_gnome == 'true'
+
+    - name: Update Fedora
+      dnf:     
+        name: '*'
+        state: latest
+        update_cache: yes
+        update_only: yes
+      become: yes
+      when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+      tags:    
+        - setup
+               
+               
+    - name: Enable the RPM Fusion Free repository
+      dnf:     
+        name: "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ansible_distribution_major_version}}.noarch.rpm"
+        state: present
+        disable_gpg_check: True
+      become: yes
+      when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+      tags:    
+        - setup
+               
+               
+    - name: Enable the RPM Fusion Non-Free repository
+      dnf:     
+        name: "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ansible_distribution_major_version}}.noarch.rpm"
+        state: present
+        disable_gpg_check: True
+      become: yes
+      when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+      tags:    
+        - setup
+               
+               
+    - name: Remove unneded packages
+      dnf:     
+        autoremove: yes
+      become: yes
+      when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+      tags:    
+        - setup
+
+    - name: Install dependencies
+      become: true                                                                                                        
+      dnf:                                                                                                                
+        name:                                                                                                             
+          - '@Development Tools'                                                                                          
+          - '@Development Libraries'                                                                                      
+          - '@Sound and Video'                                                                                            
+          - '@Multimedia'                                                                                                 
+          - gtk2-devel
+          - autoconf
+          - gcc
+          - rust
+          - patch
+          - make
+          - bzip2
+          - openssl-devel
+          - libyaml-devel
+          - libffi-devel
+          - readline-devel
+          - zlib-devel
+          - gdbm-devel
+          - ncurses-devel
+          - glibc-devel
+        state: latest                                                                                                     
+        allowerasing: true                                                                                                
+      tags:                                                                                                               
+        - setup                                                                                                           
+        - install                                                                                                         
+        - core                                                                                                            
+      when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+
+    - name: Swapp ffmpeg packages
+      become: true                                                                                                        
+      shell: |                                                                                                            
+        dnf swap ffmpeg-free ffmpeg --allowerasing -y
+      when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+
+    - name: Install System Packages (zsh, emacs, curl, git, lua, unzip, libtool, gettext)
+      become: true
+      dnf:
+        name:
+          - lsb_release
+          - gpg
+          - wget
+          - bison
+          - trash-cli
+          - fzf
+          - ripgrep
+          - ImageMagick
+          - mupdf
+          - sqlite
+          - mysql-libs
+          - libpq-devel
+          - libpq
+          - pgcli
+          - bat
+          - curl
+          - git
+          - lua
+          - unzip
+          - libtool
+          - gettext
+          - jq
+          - stow
+          - tmux
+          - flatpak
+          - mozc
+          - renameutils
+          - alacritty
+          - btop   
+          - golang 
+          - lsof   
+          - ccache 
+          - moreutils
+          - rpmfusion-free-release-tainted
+          - rpmfusion-nonfree-release-tainted
+          - dnfdragora
+          - eza
+          - zoxide
+          - plocate
+          - fd-find
+          - tldr
+          - rsync
+          - zenity
+          - optipng
+          - sed
+          - sshpass
+          - pango
+          - xclip
+          - zip
+          - parallel
+          - lftp
+          - ghostscript
+          - openssl
+        state: latest
+      tags:
+        - setup
+        - install
+        - core
+      when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+
+       
+    - name: Fix Numphy  setup correctly on modprobe
+      shell: |
+        grep -qxF 'options hid_apple fnmode=0' /etc/modprobe.d/hid_apple.conf || echo 'options hid_apple fnmode=0' >> /etc/modprobe.d/hid_apple.conf
+      tags:
+        - install
+        - core
+      become: yes
+      when:  ansible_distribution == 'Fedora' or ansible_distribution == 'CentOs' or  ansible_distribution  == 'RedHat'
+       
+    - name: Check if Numphy is setup correctly on dracut
+      stat:
+        path: "/etc/dracut.conf.d/hid_apple.conf"
+      register: numphy
+      tags:
+        - install
+        - core
+      become: yes
+      when:  ansible_distribution == 'Fedora' or ansible_distribution == 'CentOs' or  ansible_distribution  == 'RedHat'
+       
+    - name: Fix Numphy keyboard on Fedora
+      become: true
+      shell: |
+        echo "install_items+=/etc/modprobe.d/hid_apple.conf" >> /etc/dracut.conf.d/hid_apple.conf && dracut --force
+      when: ansible_distribution == 'Fedora' or ansible_distribution == 'CentOs' or ansible_distribution  == 'RedHat' and numphy.stat.exists == False
+
+
+
+    - name: Install Recommended Apps
+      become: true
+      dnf:
+        name:
+          - ulauncher
+          - flameshot
+          - audacity
+          - mypaing
+          - emacs
+          - inkscape
+          - hugin
+          - peek
+          - audacity
+          - fontforge
+          - gimp
+          - vlc
+          - xournalpp
+          - xournalpp-plugins
+          - xournalpp-ui
+          - krita
+      tags:
+        - setup
+        - install
+        - core
+      when:  ansible_distribution  == 'Fedora' or  ansible_distribution  == 'CentOs' or  ansible_distribution  == 'RedHat'
+
+
+    - import_tasks: tasks/nvidia-drivers.yml
+    
+    - import_tasks: tasks/bash.yml
+
+    - import_tasks: tasks/java-environment.yml
+
+    - import_tasks: tasks/ruby-environment.yml
+
+    - import_tasks: tasks/nodejs-environment.yml
+
+    - import_tasks: tasks/go-environment.yml
+
+    - import_tasks: tasks/python-environment.yml
+
+    - import_tasks: tasks/flatpack.yml
+
+    - import_tasks: tasks/fonts.yml
+
+    - import_tasks: tasks/gnome-improvement.yml
+
+    - import_tasks: tasks/gnome-theme.yml
+
+    - import_tasks: tasks/gnome-post-tasks.yml

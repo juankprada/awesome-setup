@@ -8,27 +8,6 @@
   tags:
     - setup
 
-- name: Install multiple packages
-  community.general.flatpak:
-    name:
-      - org.beeref.BeeRef
-      - io.beekeeperstudio.Studio
-      - com.brave.Browser
-      - sh.cider.Cider
-      - com.discordapp.Discord
-      - net.displaycal.DisplayCAL
-      - net.cozic.joplin_desktop
-      - org.kde.krita
-      - org.gnome.World.PikaBackup
-      - com.getpostman.Postman
-      - com.skype.Client
-      - com.slack.Slack
-      - us.zoom.Zoom
-    state: present
-    method: user
-  tags:
-    - install
-    - flatpak
 
 - name: Install multiple packages
   community.general.flatpak:
@@ -38,19 +17,32 @@
       - com.brave.Browser
       - sh.cider.Cider
       - com.discordapp.Discord
-      - net.displaycal.DisplayCAL
       - net.cozic.joplin_desktop
-      - org.kde.krita
       - org.gnome.World.PikaBackup
-      - com.getpostman.Postman
       - com.skype.Client
       - com.slack.Slack
       - us.zoom.Zoom
+      - org.inkscape.Inkscape
+      - org.kde.kdenlive
+      - com.obsproject.Studio
+      - org.blender.Blender
+      - org.gnome.gitlab.YaLTeR.VideoTrimmer
+      - org.gnome.gitlab.YaLTeR.Identity
+      - com.neatdecisions.Detwinner
+
     state: present
     method: user
   tags:
     - install
     - flatpak
+
+- name: Install DisplayCal in opensuse
+  community.general.flatpak:
+    name:
+      - net.displaycal.DisplayCAL
+    state: present
+    method: user
+  when: ansible_distribution == 'openSUSE Leap'
 
 
 - name: Install Extra games

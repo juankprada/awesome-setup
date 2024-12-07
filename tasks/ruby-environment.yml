@@ -1,0 +1,36 @@
+- name: Install Ruby Development environment in Linux
+  become: no
+  block:
+  - name: Check if Rbenv is installed
+    stat:
+      path: "{{ ansible_env.HOME }}/.rbenv/bin/rbenv"
+    register: rbenv_installed
+
+  - name: Install Rbenv
+    ansible.builtin.git:
+      repo: "https://github.com/rbenv/rbenv.git"
+      dest: "{{ ansible_env.HOME }}/.rbenv"
+    when: rbenv_installed.stat.exists == False
+
+  - name: Configure Rbenv
+    shell: "{{ ansible_env.HOME }}/.rbenv/bin/rbenv init > /dev/null"
+    args:
+      executable: /bin/bash
+
+  - name: Create plugins directory for rbenv
+    file:
+      path:  "{{ ansible_env.HOME }}/.rbenv/plugins/"
+      state: directory
+
+  - name: Installing Rbenv Install Plugin
+    ansible.builtin.git:
+      repo: "https://github.com/rbenv/ruby-build.git"
+      dest: "{{ ansible_env.HOME }}/.rbenv/plugins/ruby-build"
+
+  - name: Installing Ruby
+    shell: eval "$({{ ansible_env.HOME }}/.rbenv/bin/rbenv init - --no-rehash bash)" && rbenv install --skip-existing 3.3.4 
+    args:
+      executable: /bin/bash
+
+  when: install_ruby_env == 'true' and (ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian' or ansible_distribution == 'Fedora' or ansible_distribution == 'openSUSE Leap')
+

@@ -1,0 +1,211 @@
+---
+- name: Opensuse Leap setup
+  hosts: localhost
+  connection: local
+  vars:
+    ansible_become_password: '{{ lookup("env", "ANSIBLE_BECOME_PASSWORD") }}'
+  vars_files:
+    - ./vars.yml
+  tasks:
+    - name: Update openSuse Leap
+      zypper:
+        name: '*'
+        state: dist-upgrade
+        update_cache: true
+      become: yes
+      when:  ansible_distribution  == 'openSUSE Leap'
+      tags:
+        - setup
+
+    - name: Add PACKMAN repository
+      community.general.zypper_repository:
+        name: packman
+        repo: 'https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Leap_$releasever/'
+        state: present
+        runrefresh: true
+        auto_import_keys: true
+      become: yes
+      when:  ansible_distribution  == 'openSUSE Leap'
+      tags:
+        - setup
+        - leap
+
+    - name: Add NVIDIA repository
+      community.general.zypper_repository:
+        name: nvidia-repo
+        repo: 'https://download.nvidia.com/opensuse/leap/$releasever'
+        state: present
+        runrefresh: true
+        auto_import_keys: true
+      become: yes
+      when:  ansible_distribution  == 'openSUSE Leap'
+      tags:
+        - setup
+        - leap
+
+
+    - name: Update Installed Packages allowing  Vendor Change
+      zypper:
+        name: '*'
+        state: dist-upgrade
+        allow_vendor_change: true
+        update_cache: true
+      become: yes
+      when:  ansible_distribution  == 'openSUSE Leap'
+      tags:
+        - setup
+        - leap
+
+    - name: Install Development Packages
+      zypper:
+        type: pattern
+        name:
+          - devel_basis
+          - devel_C_C++
+          - devel_python3
+          - devel_ruby
+          - devel_kde_frameworks
+        state: latest
+        disable_recommends: false
+      become: yes
+      when:  ansible_distribution  == 'openSUSE Leap'
+      tags:
+        - setup
+        - leap
+
+    - name: Install Multimedia Codecs
+      zypper:
+        name:
+          - ffmpeg
+          - gstreamer-plugins-good
+          - gstreamer-plugins-bad
+          - gstreamer-plugins-ugly
+          - gstreamer-plugins-libav
+          - libavcodec-full
+          - vlc-codecs
+        state: latest
+        disable_recommends: false
+        allow_vendor_change: true
+        extra_args: '--from packman'
+      become: yes
+      when:  ansible_distribution  == 'openSUSE Leap'
+      tags:
+        - setup
+        - leap
+
+    - name: Install System Packages 2 (zsh, emacs, curl, git, lua, unzip, libtool, libtool, gettext)
+      become: true
+      zypper:
+        name:
+          - mozc
+          - emacs
+          - bat
+          - curl
+          - git
+          - lua54
+          - unzip
+          - libtool
+          - gettext-runtime
+          - jq
+          - stow
+          - tmux
+          - flatpak
+          - python3-websocket-client
+          - zip
+          - btop
+          - lsof
+          - ccache
+          - python3-pip
+          - moreutils
+          - eza
+          - eza-bash-completion
+          - patch
+          - ImageMagick
+          - alacritty
+          - alacritty-bash-completion
+          - fd
+          - fzf
+          - fzf-bash-completion
+          - fzf-tmux
+          - optipng
+          - plocate
+          - renameutils
+          - ripgrep
+          - ripgrep-bash-completion
+          - rsync
+          - sed
+          - xclip
+          - borgbackup
+          - borgbackup-bash-completion
+          - btrfsmaintenance
+          - syncthing
+          - argyllcms
+          - colord-kde
+          - kdenetwork-filesharing
+          - flameshot
+          - flameshot-bash-completion
+          - audacity
+          - fontforge
+          - hugin
+          - peek
+          - vlc
+          - xournalpp
+          - xsane
+          - dolphin-plugins
+          - nextcloud-desktop-dolphin
+          - zim
+          - qimgv
+          - clementine
+          - filezilla
+          - krename
+          - steam
+          - wesnoth
+          - ibus
+          - ibus-mozc
+          - mozc
+          - gpg2
+          - libffi-devel
+          - libjemalloc2
+          - libpq5
+          - gcc
+          - make
+          - rust
+          - patch
+          - automake
+          - bzip2
+          - libopenssl-devel
+          - libyaml-devel
+          - libffi-devel
+          - readline-devel
+          - zlib-devel
+          - gdbm-devel
+          - ncurses-devel
+        state: latest
+        disable_recommends: false
+      tags:
+        - setup
+        - install
+        - core
+      when:  ansible_distribution  == 'openSUSE Leap'
+
+    - import_tasks: tasks/nvidia-drivers.yml
+
+    - import_tasks: tasks/bash.yml
+
+    - import_tasks: tasks/java-environment.yml
+
+    - import_tasks: tasks/ruby-environment.yml
+
+    - import_tasks: tasks/nodejs-environment.yml
+
+    - import_tasks: tasks/go-environment.yml
+
+    - import_tasks: tasks/python-environment.yml
+
+    - import_tasks: tasks/flatpack.yml
+
+    - import_tasks: tasks/fonts.yml
+
+    - import_tasks: tasks/emacs-server.yml
+
+    - import_tasks: tasks/git-setup.yml

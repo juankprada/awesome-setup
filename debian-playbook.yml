@@ -1,0 +1,253 @@
+---
+- name: Debian Dev environment setup
+  hosts: localhost
+  connection: local
+  vars:
+    ansible_become_password: '{{ lookup("env", "ANSIBLE_BECOME_PASSWORD") }}'
+  vars_files:
+    - ./vars.yml
+
+  tasks:
+    - name: Update Debian packages
+      become: yes
+      apt:
+        upgrade: "safe"
+      when: ansible_distribution == 'Debian'
+      tags:
+      - pkg
+      - debian
+
+    # - name: Add specified repository into sources list 1
+    #   become: yes
+    #   ansible.builtin.apt_repository:
+    #     repo: deb http://deb.debian.org/debian bookworm non-free non-free-firmware
+    #     state: present
+    #   when: ansible_distribution == 'Debian'
+
+    # - name: Add specified repository into sources list 2
+    #   become: yes
+    #   ansible.builtin.apt_repository:
+    #     repo: deb-src http://deb.debian.org/debian bookworm non-free non-free-firmware
+    #     state: present
+    #   when: ansible_distribution == 'Debian'
+
+    # - name: Add specified repository into sources list 3
+    #   become: yes
+    #   ansible.builtin.apt_repository:
+    #     repo: deb http://deb.debian.org/debian-security bookworm-security non-free non-free-firmware
+    #     state: present
+    #   when: ansible_distribution == 'Debian'
+
+    # - name: Add specified repository into sources list 4
+    #   become: yes
+    #   ansible.builtin.apt_repository:
+    #     repo: deb-src http://deb.debian.org/debian-security bookworm-security non-free non-free-firmware
+    #     state: present
+    #   when: ansible_distribution == 'Debian'
+
+    # - name: Add specified repository into sources list 5
+    #   become: yes
+    #   ansible.builtin.apt_repository:
+    #     repo: deb http://deb.debian.org/debian bookworm-updates non-free non-free-firmware
+    #     state: present
+    #   when: ansible_distribution == 'Debian'
+
+    # - name: Add specified repository into sources list 6
+    #   become: yes
+    #   ansible.builtin.apt_repository:
+    #     repo: deb-src http://deb.debian.org/debian bookworm-updates non-free non-free-firmware
+    #     state: present
+    #   when: ansible_distribution == 'Debian'
+
+    - name: Update all packages to their latest version
+      ansible.builtin.apt:
+        name: "*"
+        state: latest
+      when: ansible_distribution == 'Debian'
+      become: yes
+
+
+    - name: Install dependencies
+      become: yes'
+      when: ansible_distribution == 'Debian'
+      block:
+      - name: Install build essentials
+        become: true
+        apt:
+          name:
+          - patch
+          - rustc
+          - libreadline6-dev
+          - libgmp-dev
+          - libgdbm6
+          - libdb-dev
+          - uuid-dev
+          - autoconf
+          - bison
+          - cmake
+          - gir1.2-clutter-1.0
+          - gir1.2-gtop-2.0
+          - gpg
+          - imagemagick
+          - libffi-dev
+          - libgdbm-dev
+          - libjemalloc2
+          - libmagickwand-dev
+          - default-libmysqlclient-dev
+          - libncurses5-dev
+          - libpq-dev
+          - libpthread-stubs0-dev
+          - libreadline-dev
+          - libreadline-dev
+          - libsqlite3-0
+          - libssl-dev
+          - libvips
+          - libyaml-dev
+          - mupdf
+          - mupdf-tools
+          - pkg-config
+          - postgresql-client
+          - postgresql-client-common
+          - redis-tools
+          - sqlite3
+          - wget
+          - zlib1g-dev
+          - build-essential
+          - mercurial
+          - binutils
+          - gcc
+          - x11-xserver-utils
+        tags:
+        - pkg
+        - debian
+
+      - name: enable i386 packages
+        become: true
+        shell:
+          cmd: dpkg --add-architecture i386
+
+      - name: Core terminal tools
+        become: true
+        apt:
+          name:
+          - alacritty
+          - bat
+          - btop
+          - coreutils
+          - curl
+          - exa
+          - fd-find
+          - fzf
+          - gettext
+          - git
+          - jq
+          - libtool
+          - lsof
+          - make
+          - moreutils
+          - optipng
+          - pango1.0-tools
+          - plocate
+          - renameutils
+          - ripgrep
+          - rsync
+          - sed
+          - sshpass
+          - stow
+          - tldr
+          - tmux
+          - unzip
+          - xclip
+          - zenity
+          - zoxide
+          - trash-cli
+          - btrbk
+        tags:
+        - pkg
+        - debian
+
+      - name: Install Recommended Apps
+        become: true
+        apt:
+          name:
+          - borgbackup
+          - btrfsmaintenance
+          - freefilesync
+          - syncthing
+          - samba
+          - kde-config-tablet
+          - displaycal
+          - dispcalgui
+          - argyll
+          - colord-kde
+          - kdenetwork-filesharing
+          - flameshot # Better Screen shots
+          - audacity
+          - inkscape
+          - flatpak
+          - fontforge
+          - fontforge-common
+          - fontforge-extras
+          - gimp
+          - hugin
+          - peek
+          - mypaint
+          - vlc
+          - xournalpp
+          - firewalld
+          - plasma-firewall
+          - firewall-config
+          - xsane
+          - xsane-common
+          - yagf
+          - dolphin-plugins
+          - zim
+          - qimgv
+          - clementine
+          - filezilla
+          - krename
+          - treesheets
+          - plasma-discover-backend-flatpak
+          - kde-config-flatpak
+          - python-is-python3
+
+      - name: Installs multilingual packages for KDE
+        become: true
+        apt:
+          name:
+            - fcitx5
+            - fcitx5-mozc
+            - fcitx5-frontend-gtk3
+            - fcitx5-frontend-qt5
+            - fcitx5-module-xorg
+            - kde-config-fcitx5
+            - im-config
+          install_recommends: false
+          state: latest
+
+    - import_tasks: tasks/nvidia-drivers.yml
+
+    - import_tasks: tasks/bash.yml
+
+    - import_tasks: tasks/java-environment.yml
+
+    - import_tasks: tasks/ruby-environment.yml
+
+    - import_tasks: tasks/nodejs-environment.yml
+
+    - import_tasks: tasks/go-environment.yml
+
+    - import_tasks: tasks/python-environment.yml
+
+    - import_tasks: tasks/flatpack.yml
+
+    - import_tasks: tasks/fonts.yml
+
+    - import_tasks: tasks/emacs-server.yml
+
+
+  handlers:
+    - name: update apt cache
+      apt:
+        update_cache: yes
+      become: yes

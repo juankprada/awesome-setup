@@ -1,0 +1,16 @@
+- name: Restore Lock and idle Delay
+  block:                         
+  - name: Register original Lock Enabled value
+    community.general.dconf:     
+      key: "/org/gnome/desktop/screensaver/lock-enabled"
+      value: "{{ orig_gnome_lock_enabled['value'] }}"
+      state: present             
+    register:                    
+                                 
+  - name: Register original Idle Delay value
+    community.general.dconf:     
+      key: "/org/gnome/desktop/session/idle-delay"
+      value: "{{ orig_gnome_idle_delay['value'] }}"
+      state: present             
+    register:                    
+  when: running_gnome == 'true'

@@ -1,0 +1,28 @@
+- name: Disable Suspension and Lock while updating
+  block:                         
+  - name: Register original Lock Enabled value
+    community.general.dconf:     
+      key: "/org/gnome/desktop/screensaver/lock-enabled"
+      state: read                
+    register: orig_gnome_lock_enabled
+    when: running_gnome == 'true'
+  - name: Register original Idle Delay value
+    community.general.dconf:     
+      key: "/org/gnome/desktop/session/idle-delay"
+      state: read                
+    register: orig_gnome_idle_delay
+    when: running_gnome == 'true'
+                                 
+  - name: Set Lock to Disabled   
+    community.general.dconf:     
+      key: "/org/gnome/desktop/screensaver/lock-enabled"
+      value: false               
+      state: present             
+    when: running_gnome == 'true'
+                                 
+  - name: Set Idle Delay to 0    
+    community.general.dconf:     
+      key: "/org/gnome/desktop/session/idle-delay"
+      value: 0                   
+      state: present             
+    when: running_gnome == 'true'

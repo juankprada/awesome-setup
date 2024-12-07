@@ -1,0 +1,24 @@
+- name: Setup Emacs as the default editor
+  block:
+    - name: Create the systemd user directory
+      file:
+        path: "{{ ansible_env.HOME }}/.config/systemd/user/"
+        state: directory
+        
+    - name: Add Emacs.service to User
+      template:
+        src: templates/emacs.service.j2
+        dest: "{{ ansible_env.HOME }}/.config/systemd/user/emacs.service"
+
+    - name: Enable Emacs servie
+      ansible.builtin.systemd_service:
+       name: emacs
+       enabled: true
+       scope: user
+
+    - name: Start Emacs service
+      ansible.builtin.systemd_service:
+        name: emacs
+        state: started
+        scope: user
+  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Fedora' or ansible_distribution == 'Debian' or ansible_distribution == 'openSUSE Leap'

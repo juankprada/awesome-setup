@@ -1,5 +1,60 @@
-- name: Copy Font files
-  synchronize:
-    src: "{{ playbook_dir }}/fonts"
-    dest: "{{ ansible_env.HOME }}/.local/share/"
-  delegate_to: "{{ inventory_hostname }}"
+- name: Install recommended fonts
+  block:
+  - name: Make sure Local Fonts directory exist
+    file:
+      path: "{{ ansible_env.HOME }}/.local/share/fonts"
+      state: directory
+
+  - name: Install Cascadia Mono Font
+    block:
+    - name: Download Cascadia Mono Font
+      get_url:
+        url: https://github.com/ryanoasis/nerd-fonts/releases/latest/download/CascadiaMono.tar.xz
+        dest: "{{ ansible_env.HOME }}/.local/share/fonts"
+
+    - name: Extract Cascadia Mono Font
+      unarchive:
+        src: "{{ ansible_env.HOME }}/.local/share/fonts/CascadiaMono.tar.xz"
+        dest: "{{ ansible_env.HOME }}/.local/share/fonts/"
+
+    - name: Delete Cascadia Zip file
+      file:
+        path: "{{ ansible_env.HOME }}/.local/share/fonts/CascadiaMono.tar.xz"
+        state: absent
+
+  - name: Install Intel One Mono Font
+    block:
+    - name: Download Intel One Mono Font
+      get_url:
+        url: https://github.com/ryanoasis/nerd-fonts/releases/latest/download/IntelOneMono.tar.xz
+        dest: "{{ ansible_env.HOME }}/.local/share/fonts"
+
+    - name: Extract Cascadia Mono Font
+      unarchive:
+        src: "{{ ansible_env.HOME }}/.local/share/fonts/IntelOneMono.tar.xz"
+        dest: "{{ ansible_env.HOME }}/.local/share/fonts/"
+
+    - name: Delete Cascadia Zip file
+      file:
+        path: "{{ ansible_env.HOME }}/.local/share/fonts/IntelOneMono.tar.xz"
+        state: absent
+
+  - name: Install Hack Mono Font
+    block:
+    - name: Download Intel One Mono Font
+      get_url:
+        url: https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Hack.tar.xz
+        dest: "{{ ansible_env.HOME }}/.local/share/fonts"
+
+    - name: Extract Cascadia Mono Font
+      unarchive:
+        src: "{{ ansible_env.HOME }}/.local/share/fonts/Hack.tar.xz"
+        dest: "{{ ansible_env.HOME }}/.local/share/fonts/"
+
+    - name: Delete Cascadia Zip file
+      file:
+        path: "{{ ansible_env.HOME }}/.local/share/fonts/Hack.tar.xz"
+        state: absent
+
+  - name: Refrech Font cache
+    shell: fc-cache

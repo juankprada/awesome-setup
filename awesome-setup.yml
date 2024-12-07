@@ -6,18 +6,28 @@
     ansible_become_password: '{{ lookup("env", "ANSIBLE_BECOME_PASSWORD") }}'
   vars_files:
     - ./vars.yml
-  pre_tasks:
-    - import_tasks: tasks/fedora-setup.yml
-    - import_tasks: tasks/ubuntu-setup.yml
-    - import_tasks: tasks/debian-setup.yml
-    - import_tasks: tasks/opensuse-tumbleweed-setup.yml
-    - import_tasks: tasks/opensuse-leap-setup.yml
-  tasks:
-    - import_tasks: tasks/git-setup.yml
-    - import_tasks: tasks/sdkman-setup.yml
-    - import_tasks: tasks/awesome-java-setup.yml
-    - import_tasks: tasks/js-setup.yml
-    - import_tasks: tasks/personal-projects.yml
-    - import_tasks: tasks/dotfiles.yml
-    - import_tasks: tasks/flatpack.yml
-    - import_tasks: tasks/fonts.yml
+
+
+- name: Include macos-playbook
+  import_playbook: macos-playbook.yml
+  when: ansible_distribution == 'Darwin'
+
+- name: Include ubuntu-playbook
+  import_playbook: ubuntu-playbook.yml
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Include fedora-playbook
+  import_playbook: fedora-playbook.yml
+  when: ansible_distribution == 'Fedora'
+
+- name: Include Debian-playbook
+  import_playbook: debian-playbook.yml
+  when: ansible_distribution == 'Debian'
+
+- name: Include OpenSuse Leap-playbook
+  import_playbook: opensuse-leap-playbook.yml
+  when: ansible_distribution == 'openSUSE Leap'
+
+
+- name: Include Dotfiles-playbook
+  import_playbook: dotfiles-playbook.yml

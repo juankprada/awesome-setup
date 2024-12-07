@@ -1,7 +1,0 @@
-- name: Add key to SSH Agent
-  script: ./cleanup.sh
-  tags:
-    - dotfiles
-    - ssh
-    - install
-  become: no
