@@ -7,8 +7,8 @@
     register: gvm_installed
 
   - name: Install GVM
-    ansible.builtin.shell:
-      bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
+    ansible.builtin.shell: >
+      curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer | bash
     args:
       creates: "{{ ansible_env.HOME }}/.gvm/scripts/gvm"
     when: gvm_installed.stat.exists == False
@@ -30,4 +30,4 @@
     args:
       executable: /bin/bash
   
-  when: install_go_env == 'true' and (ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian' or ansible_distribution == 'Fedora')
+  when: install_go_env == 'true' and (ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian' or ansible_distribution == 'Fedora' or ansible_distribution == 'openSUSE Leap')

@@ -21,5 +21,4 @@
         name: emacs
         state: started
         scope: user
-  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Fedora' or ansible_distribution == 'Debian'
-  
+  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Fedora' or ansible_distribution == 'Debian' or ansible_distribution == 'openSUSE Leap'

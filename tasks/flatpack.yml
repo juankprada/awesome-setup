@@ -36,6 +36,14 @@
     - install
     - flatpak
 
+- name: Install DisplayCal in opensuse
+  community.general.flatpak:
+    name:
+      - net.displaycal.DisplayCAL
+    state: present
+    method: user
+  when: ansible_distribution == 'openSUSE Leap'
+
 
 - name: Install Extra games
   community.general.flatpak:

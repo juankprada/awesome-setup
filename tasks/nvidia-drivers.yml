@@ -17,6 +17,21 @@
   - drivers
   - ubuntu
 
+- name: Install Nvidia drivers and tools under OpenSuse Leap
+  block:
+  - name: Install Drivers (OpenSuse Leap)
+    become: true
+    zypper:
+      name:
+        - nvidia-video-G06
+        - nvidia-gl-G06
+      state: latest
+      disable_recommends: false
+    tags:
+      - install
+      - core
+      - art
+    when:  ansible_distribution  == 'openSUSE Leap'
 
 - name: Install Nvidia drivers and tools under Debian
   block:
@@ -30,7 +45,6 @@
       - vulkan-tools
       - libnvoptix1
       - mesa-vulkan-drivers
-
   - name: update apt cache
     apt:
       update_cache: yes
@@ -43,7 +57,7 @@
       - libglx-mesa0:i386
       - mesa-vulkan-drivers:i386
       - libgl1-mesa-dri:i386
-  when: ansible_distribution == 'Debian'
+  when: ansible_distribution == 'Debian' and 0 > 1
   tags:
   - drivers
   - debian

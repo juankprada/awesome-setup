@@ -17,6 +17,6 @@
 
   - name: Install latest versions of python in Fedora
     shell: pip install --user pipenv    
-    when: ansible_distribution == 'Fedora'
+    when: ansible_distribution == 'Fedora' or ansible_distribution == 'openSUSE Leap'
     
   when: install_python_env == 'true'

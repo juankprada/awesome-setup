@@ -18,4 +18,4 @@
     args:
       executable: /bin/bash
 
-  when: install_nodejs_env == 'true' and (ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian' or ansible_distribution == 'Fedora')
+  when: install_nodejs_env == 'true' and (ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian' or ansible_distribution == 'Fedora' or ansible_distribution == 'openSUSE Leap')

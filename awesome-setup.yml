@@ -7,8 +7,6 @@
   vars_files:
     - ./vars.yml
 
-- name: Include Dotfiles-playbook
-  import_playbook: dotfiles-playbook.yml
 
 - name: Include macos-playbook
   import_playbook: macos-playbook.yml
@@ -25,3 +23,11 @@
 - name: Include Debian-playbook
   import_playbook: debian-playbook.yml
   when: ansible_distribution == 'Debian'
+
+- name: Include OpenSuse Leap-playbook
+  import_playbook: opensuse-leap-playbook.yml
+  when: ansible_distribution == 'openSUSE Leap'
+
+
+- name: Include Dotfiles-playbook
+  import_playbook: dotfiles-playbook.yml

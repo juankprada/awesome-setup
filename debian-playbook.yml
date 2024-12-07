@@ -17,47 +17,47 @@
       - pkg
       - debian
 
-    - name: Add specified repository into sources list 1
-      become: yes
-      ansible.builtin.apt_repository:
-        repo: deb http://deb.debian.org/debian bookworm non-free non-free-firmware
-        state: present
-      when: ansible_distribution == 'Debian'
+    # - name: Add specified repository into sources list 1
+    #   become: yes
+    #   ansible.builtin.apt_repository:
+    #     repo: deb http://deb.debian.org/debian bookworm non-free non-free-firmware
+    #     state: present
+    #   when: ansible_distribution == 'Debian'
 
-    - name: Add specified repository into sources list 2
-      become: yes
-      ansible.builtin.apt_repository:
-        repo: deb-src http://deb.debian.org/debian bookworm non-free non-free-firmware
-        state: present
-      when: ansible_distribution == 'Debian'
+    # - name: Add specified repository into sources list 2
+    #   become: yes
+    #   ansible.builtin.apt_repository:
+    #     repo: deb-src http://deb.debian.org/debian bookworm non-free non-free-firmware
+    #     state: present
+    #   when: ansible_distribution == 'Debian'
 
-    - name: Add specified repository into sources list 3
-      become: yes
-      ansible.builtin.apt_repository:
-        repo: deb http://deb.debian.org/debian-security bookworm-security non-free non-free-firmware
-        state: present
-      when: ansible_distribution == 'Debian'
+    # - name: Add specified repository into sources list 3
+    #   become: yes
+    #   ansible.builtin.apt_repository:
+    #     repo: deb http://deb.debian.org/debian-security bookworm-security non-free non-free-firmware
+    #     state: present
+    #   when: ansible_distribution == 'Debian'
 
-    - name: Add specified repository into sources list 4
-      become: yes
-      ansible.builtin.apt_repository:
-        repo: deb-src http://deb.debian.org/debian-security bookworm-security non-free non-free-firmware
-        state: present
-      when: ansible_distribution == 'Debian'
+    # - name: Add specified repository into sources list 4
+    #   become: yes
+    #   ansible.builtin.apt_repository:
+    #     repo: deb-src http://deb.debian.org/debian-security bookworm-security non-free non-free-firmware
+    #     state: present
+    #   when: ansible_distribution == 'Debian'
 
-    - name: Add specified repository into sources list 5
-      become: yes
-      ansible.builtin.apt_repository:
-        repo: deb http://deb.debian.org/debian bookworm-updates non-free non-free-firmware
-        state: present
-      when: ansible_distribution == 'Debian'
+    # - name: Add specified repository into sources list 5
+    #   become: yes
+    #   ansible.builtin.apt_repository:
+    #     repo: deb http://deb.debian.org/debian bookworm-updates non-free non-free-firmware
+    #     state: present
+    #   when: ansible_distribution == 'Debian'
 
-    - name: Add specified repository into sources list 6
-      become: yes
-      ansible.builtin.apt_repository:
-        repo: deb-src http://deb.debian.org/debian bookworm-updates non-free non-free-firmware
-        state: present
-      when: ansible_distribution == 'Debian'
+    # - name: Add specified repository into sources list 6
+    #   become: yes
+    #   ansible.builtin.apt_repository:
+    #     repo: deb-src http://deb.debian.org/debian bookworm-updates non-free non-free-firmware
+    #     state: present
+    #   when: ansible_distribution == 'Debian'
 
     - name: Update all packages to their latest version
       ansible.builtin.apt:
